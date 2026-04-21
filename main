@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C1/C2 English — Exercises + Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0f0f;
+  --surface: #181818;
+  --surface2: #212121;
+  --surface3: #252525;
+  --border: #2e2e2e;
+  --text: #e8e4dc;
+  --muted: #7a7570;
+  --accent: #d4a853;
+  --accent2: #c0785a;
+  --correct: #4caf7d;
+  --wrong: #e05c5c;
+  --tag-bg: #1e1e1e;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-weight: 300; min-height: 100vh; overflow-x: hidden; }
+
+/* ── Header ── */
+header { padding: 2rem 1.5rem 1.2rem; text-align: center; border-bottom: 1px solid var(--border); position: relative; }
+header::after { content:''; position:absolute; bottom:-1px; left:50%; transform:translateX(-50%); width:80px; height:2px; background:linear-gradient(90deg,var(--accent),var(--accent2)); }
+.logo { font-family:'DM Serif Display',serif; font-size:clamp(1.5rem,5vw,2.2rem); letter-spacing:-0.01em; }
+.logo em { font-style:italic; color:var(--accent); }
+.subtitle { margin-top:.35rem; font-size:.75rem; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+
+/* ── Nav tabs ── */
+.main-nav { display:flex; background:var(--surface); border-bottom:1px solid var(--border); }
+.main-nav button { flex:1; padding:.85rem 1rem; border:none; background:transparent; color:var(--muted); cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.82rem; letter-spacing:.08em; text-transform:uppercase; border-bottom:2px solid transparent; transition:all .2s; }
+.main-nav button:hover { color:var(--text); }
+.main-nav button.active { color:var(--accent); border-bottom-color:var(--accent); font-weight:600; }
+
+/* ── Pages ── */
+.page { display:none; }
+.page.active { display:block; }
+
+/* ════════════════ EXERCISE PAGE ════════════════ */
+.filter-bar { display:flex; flex-wrap:wrap; gap:.5rem; justify-content:center; padding:1rem; background:var(--surface); border-bottom:1px solid var(--border); }
+.filter-btn { padding:.3rem .85rem; border:1px solid var(--border); background:transparent; color:var(--muted); cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.75rem; letter-spacing:.06em; text-transform:uppercase; border-radius:2px; transition:all .15s; }
+.filter-btn:hover { border-color:var(--accent); color:var(--text); }
+.filter-btn.active { background:var(--accent); border-color:var(--accent); color:#000; font-weight:600; }
+.stats-bar { display:flex; align-items:center; gap:1.5rem; padding:.8rem 1.5rem; background:var(--surface); border-bottom:1px solid var(--border); font-size:.8rem; color:var(--muted); flex-wrap:wrap; }
+.stat-item strong { color:var(--accent); font-size:1.05rem; }
+.streak { color:var(--accent2); }
+.ex-main { max-width:760px; margin:0 auto; padding:2rem 1.2rem 5rem; }
+.gen-wrap { text-align:center; margin-bottom:2rem; }
+.gen-btn { display:inline-flex; align-items:center; gap:.6rem; padding:.85rem 2rem; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#000; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.92rem; font-weight:600; letter-spacing:.04em; border-radius:2px; transition:opacity .2s,transform .15s; box-shadow:0 4px 24px rgba(212,168,83,.2); }
+.gen-btn:hover { opacity:.9; transform:translateY(-1px); }
+.gen-btn svg { width:16px; height:16px; }
+.exercise-card { background:var(--surface); border:1px solid var(--border); border-radius:4px; padding:1.8rem; margin-bottom:1.4rem; animation:slideIn .3s ease; position:relative; overflow:hidden; }
+.exercise-card::before { content:''; position:absolute; top:0; left:0; width:3px; height:100%; background:linear-gradient(180deg,var(--accent),var(--accent2)); }
+@keyframes slideIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+.card-header { display:flex; align-items:center; gap:.7rem; margin-bottom:1.2rem; flex-wrap:wrap; }
+.tag { display:inline-block; padding:.2rem .65rem; background:var(--tag-bg); border:1px solid var(--border); font-size:.68rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); border-radius:2px; }
+.tag.cat { border-color:var(--accent); color:var(--accent); background:rgba(212,168,83,.08); }
+.difficulty { margin-left:auto; font-size:.72rem; color:var(--muted); }
+.question-text { font-size:1.05rem; line-height:1.8; margin-bottom:1.2rem; }
+.question-text strong { font-weight:600; color:var(--accent); }
+.blank-input { display:inline-block; min-width:90px; background:transparent; border:none; border-bottom:1.5px solid var(--accent); color:var(--text); font-family:'DM Sans',sans-serif; font-size:1rem; padding:0 4px 2px; outline:none; text-align:center; transition:border-color .2s; }
+.blank-input:focus { border-bottom-color:#fff; }
+.blank-input.correct { border-bottom-color:var(--correct); color:var(--correct); }
+.blank-input.wrong { border-bottom-color:var(--wrong); color:var(--wrong); }
+.choices-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:.6rem; margin-top:.5rem; }
+.choice-btn { padding:.6rem 1rem; background:var(--surface2); border:1px solid var(--border); color:var(--text); cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.9rem; text-align:left; border-radius:2px; transition:all .15s; line-height:1.4; }
+.choice-btn:hover:not(:disabled) { border-color:var(--accent); background:rgba(212,168,83,.06); }
+.choice-btn.correct { background:rgba(76,175,125,.12); border-color:var(--correct); color:var(--correct); }
+.choice-btn.wrong { background:rgba(224,92,92,.1); border-color:var(--wrong); color:var(--wrong); }
+.choice-btn.reveal { background:rgba(76,175,125,.08); border-color:var(--correct); color:var(--correct); }
+.error-sentence { font-size:1.05rem; line-height:1.8; padding:.8rem 1rem; background:var(--surface2); border:1px solid var(--border); border-radius:2px; margin-bottom:1rem; font-style:italic; }
+.error-input { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:2px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:.95rem; padding:.7rem 1rem; outline:none; transition:border-color .2s; }
+.error-input:focus { border-color:var(--accent); }
+.transform-box { background:var(--surface2); border:1px solid var(--border); border-radius:2px; padding:.8rem 1rem; margin-bottom:1rem; font-size:.95rem; line-height:1.7; }
+.transform-label { font-size:.72rem; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin-bottom:.3rem; }
+.key-word { display:inline-block; padding:.15rem .6rem; background:rgba(212,168,83,.12); border:1px solid var(--accent); color:var(--accent); font-weight:600; border-radius:2px; letter-spacing:.06em; margin:0 2px; }
+.hint-text { font-size:.8rem; color:var(--muted); font-style:italic; margin-bottom:.8rem; padding-left:.5rem; border-left:2px solid var(--border); }
+.feedback-box { margin-top:1rem; padding:.7rem 1rem; border-radius:2px; font-size:.88rem; display:none; animation:fadeIn .2s ease; }
+.feedback-box.show { display:block; }
+.feedback-box.ok { background:rgba(76,175,125,.1); border-left:3px solid var(--correct); color:var(--correct); }
+.feedback-box.bad { background:rgba(224,92,92,.08); border-left:3px solid var(--wrong); color:#f08080; }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+.card-actions { display:flex; gap:.7rem; margin-top:1.2rem; flex-wrap:wrap; }
+.btn { padding:.5rem 1.2rem; border:1px solid var(--border); background:transparent; color:var(--text); cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.82rem; border-radius:2px; transition:all .15s; }
+.btn:hover { border-color:var(--accent); color:var(--accent); }
+.btn-primary { background:var(--accent); border-color:var(--accent); color:#000; font-weight:600; }
+.btn-primary:hover { opacity:.85; color:#000; }
+.empty-state { text-align:center; padding:4rem 2rem; color:var(--muted); }
+.empty-state .big { font-family:'DM Serif Display',serif; font-size:3rem; margin-bottom:1rem; opacity:.3; }
+
+/* ════════════════ THEORY PAGE ════════════════ */
+.theory-main { max-width:860px; margin:0 auto; padding:0 1.2rem 5rem; }
+
+/* Category nav sidebar */
+.theory-layout { display:grid; grid-template-columns:220px 1fr; gap:0; align-items:start; margin-top:0; }
+.theory-sidebar { position:sticky; top:0; padding:1.5rem 0 1.5rem 0; border-right:1px solid var(--border); height:100vh; overflow-y:auto; }
+.theory-sidebar::-webkit-scrollbar { width:3px; }
+.theory-sidebar::-webkit-scrollbar-thumb { background:var(--border); }
+.theory-content { padding:2rem 0 5rem 2rem; }
+
+.sidebar-label { font-size:.65rem; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); padding:.5rem 1.2rem .3rem; }
+.sidebar-btn { display:block; width:100%; text-align:left; padding:.55rem 1.2rem; border:none; background:transparent; color:var(--muted); cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.82rem; border-left:2px solid transparent; transition:all .15s; }
+.sidebar-btn:hover { color:var(--text); background:rgba(255,255,255,.02); }
+.sidebar-btn.active { color:var(--accent); border-left-color:var(--accent); background:rgba(212,168,83,.04); }
+
+.theory-section { display:none; animation:fadeIn .25s ease; }
+.theory-section.active { display:block; }
+
+.theory-h1 { font-family:'DM Serif Display',serif; font-size:1.8rem; margin-bottom:.3rem; }
+.theory-h1 em { font-style:italic; color:var(--accent); }
+.theory-intro { color:var(--muted); font-size:.88rem; margin-bottom:2rem; padding-bottom:1rem; border-bottom:1px solid var(--border); }
+
+/* Entry cards */
+.entry-grid { display:grid; gap:.9rem; }
+.entry { background:var(--surface); border:1px solid var(--border); border-radius:3px; overflow:hidden; }
+.entry-head { display:flex; align-items:baseline; gap:.8rem; padding:.85rem 1.1rem .5rem; cursor:pointer; user-select:none; }
+.entry-head:hover .entry-term { color:var(--accent); }
+.entry-term { font-family:'DM Serif Display',serif; font-size:1.05rem; color:var(--text); transition:color .15s; }
+.entry-pos { font-size:.7rem; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); }
+.entry-arrow { margin-left:auto; font-size:.75rem; color:var(--muted); transition:transform .2s; }
+.entry.open .entry-arrow { transform:rotate(180deg); }
+.entry-body { display:none; padding:.1rem 1.1rem 1rem; border-top:1px solid var(--border); margin-top:.5rem; }
+.entry.open .entry-body { display:block; }
+.entry-meaning { font-size:.92rem; line-height:1.7; color:var(--text); margin-bottom:.6rem; }
+.entry-meaning strong { color:var(--accent); font-weight:600; }
+.example-row { display:flex; gap:.6rem; margin-bottom:.45rem; align-items:baseline; }
+.ex-label { font-size:.65rem; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); flex-shrink:0; width:28px; }
+.ex-text { font-size:.88rem; font-style:italic; color:#b8b0a4; line-height:1.5; }
+.ex-text em { font-style:normal; color:var(--accent); font-weight:500; }
+.entry-note { margin-top:.6rem; font-size:.78rem; color:var(--muted); padding:.5rem .7rem; background:var(--surface2); border-left:2px solid var(--border); border-radius:0 2px 2px 0; }
+.entry-note strong { color:#a09890; }
+
+/* Category pill */
+.cat-pill { display:inline-block; padding:.15rem .55rem; font-size:.65rem; letter-spacing:.1em; text-transform:uppercase; border-radius:2px; margin-left:.4rem; vertical-align:middle; }
+.cat-pill.prep { background:rgba(76,175,125,.12); color:#4caf7d; }
+.cat-pill.phrasal { background:rgba(212,168,83,.1); color:var(--accent); }
+.cat-pill.idiom { background:rgba(192,120,90,.12); color:var(--accent2); }
+.cat-pill.colloc { background:rgba(100,149,237,.1); color:#6495ed; }
+.cat-pill.fixed { background:rgba(180,120,220,.1); color:#b478dc; }
+.cat-pill.conf { background:rgba(224,92,92,.1); color:#e05c5c; }
+
+/* Search */
+.theory-search-wrap { position:sticky; top:0; z-index:10; background:var(--bg); padding:1rem 0 .8rem; border-bottom:1px solid var(--border); margin-bottom:1.5rem; }
+.theory-search { width:100%; background:var(--surface); border:1px solid var(--border); border-radius:3px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:.9rem; padding:.65rem 1rem; outline:none; transition:border-color .2s; }
+.theory-search:focus { border-color:var(--accent); }
+.search-count { font-size:.75rem; color:var(--muted); margin-top:.4rem; }
+.no-results { text-align:center; padding:3rem; color:var(--muted); font-size:.9rem; }
+
+@media (max-width:640px) {
+  .theory-layout { grid-template-columns:1fr; }
+  .theory-sidebar { position:static; height:auto; border-right:none; border-bottom:1px solid var(--border); padding:.8rem 0; display:flex; flex-wrap:wrap; gap:.3rem; padding:.8rem 1rem; }
+  .sidebar-btn { width:auto; border:1px solid var(--border); border-left:1px solid var(--border); border-radius:2px; padding:.3rem .7rem; font-size:.75rem; }
+  .sidebar-btn.active { background:var(--accent); color:#000; border-color:var(--accent); }
+  .sidebar-label { display:none; }
+  .theory-content { padding:1.5rem 0 4rem 0; }
+  .choices-grid { grid-template-columns:1fr; }
+  .card-actions { flex-direction:column; }
+  .main-nav button { font-size:.72rem; padding:.7rem .5rem; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Advanced English <em>C1 · C2</em></div>
+  <div class="subtitle">Exercise Generator · Grammar & Phrase Reference</div>
+</header>
+
+<nav class="main-nav">
+  <button class="active" onclick="switchPage('exercises',this)">⚡ Exercises</button>
+  <button onclick="switchPage('theory',this)">📖 Theory & Reference</button>
+</nav>
+
+<!-- ═══════════════════ EXERCISES PAGE ═══════════════════ -->
+<div class="page active" id="page-exercises">
+  <div class="stats-bar">
+    <div class="stat-item">Attempted: <strong id="stat-attempted">0</strong></div>
+    <div class="stat-item">Correct: <strong id="stat-correct">0</strong></div>
+    <div class="stat-item">Accuracy: <strong id="stat-acc">—</strong></div>
+    <div class="stat-item streak">Streak: <strong id="stat-streak">0</strong> 🔥</div>
+  </div>
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="toggleFilter('all',this)">All Types</button>
+    <button class="filter-btn" onclick="toggleFilter('prepositions',this)">Prepositions</button>
+    <button class="filter-btn" onclick="toggleFilter('phrasal',this)">Phrasal Verbs</button>
+    <button class="filter-btn" onclick="toggleFilter('collocations',this)">Collocations</button>
+    <button class="filter-btn" onclick="toggleFilter('idioms',this)">Idioms</button>
+    <button class="filter-btn" onclick="toggleFilter('fixed',this)">Fixed Phrases</button>
+    <button class="filter-btn" onclick="toggleFilter('wordformation',this)">Word Formation</button>
+    <button class="filter-btn" onclick="toggleFilter('error',this)">Error Correction</button>
+    <button class="filter-btn" onclick="toggleFilter('transformation',this)">Key Word Trans.</button>
+    <button class="filter-btn" onclick="toggleFilter('register',this)">Register/Formal</button>
+    <button class="filter-btn" onclick="toggleFilter('confusables',this)">Confusables</button>
+  </div>
+  <div class="ex-main">
+    <div class="gen-wrap">
+      <button class="gen-btn" onclick="generateExercise()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        Generate Exercise
+      </button>
+    </div>
+    <div id="exercise-container">
+      <div class="empty-state"><div class="big">✦</div><p>Press the button to generate a random C1/C2 exercise</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ THEORY PAGE ═══════════════════ -->
+<div class="page" id="page-theory">
+  <div class="theory-layout">
+    <aside class="theory-sidebar">
+      <div class="sidebar-label">Categories</div>
+      <button class="sidebar-btn active" onclick="showTheory('prep',this)">Prepositions</button>
+      <button class="sidebar-btn" onclick="showTheory('phrasal',this)">Phrasal Verbs</button>
+      <button class="sidebar-btn" onclick="showTheory('colloc',this)">Collocations</button>
+      <button class="sidebar-btn" onclick="showTheory('idioms',this)">Idioms</button>
+      <button class="sidebar-btn" onclick="showTheory('fixed',this)">Fixed Phrases</button>
+      <button class="sidebar-btn" onclick="showTheory('register',this)">Formal Register</button>
+      <button class="sidebar-btn" onclick="showTheory('wordform',this)">Word Formation</button>
+      <button class="sidebar-btn" onclick="showTheory('confusables',this)">Confusables</button>
+      <button class="sidebar-btn" onclick="showTheory('inversion',this)">Inversion</button>
+      <button class="sidebar-btn" onclick="showTheory('discourse',this)">Discourse Markers</button>
+      <button class="sidebar-btn" onclick="showTheory('grammar',this)">Advanced Grammar</button>
+    </aside>
+
+    <div class="theory-content">
+      <div class="theory-search-wrap">
+        <input class="theory-search" id="theory-search" placeholder="Search entries…" oninput="searchTheory(this.value)">
+        <div class="search-count" id="search-count"></div>
+      </div>
+      <div id="theory-container"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+//  EXERCISE DATABASE (unchanged)
+// ══════════════════════════════════════════════════════════
+const DB = {
+prepositions: [
+  { type:'fill', q:'She was completely <strong>taken aback</strong> ___ the harshness of the criticism.', a:'by', hint:'Passive emotion + agent.' },
+  { type:'fill', q:'The policy is <strong>tantamount</strong> ___ an admission of guilt.', a:'to', hint:'"Tantamount ___" = equivalent to.' },
+  { type:'fill', q:'His argument is <strong>premised</strong> ___ a fundamental misreading of the data.', a:'on' },
+  { type:'fill', q:'There is a striking <strong>disparity</strong> ___ the two reports.', a:'between' },
+  { type:'fill', q:'She remained <strong>adamant</strong> ___ her refusal to negotiate.', a:'about' },
+  { type:'fill', q:'The scandal cast a long <strong>shadow</strong> ___ the government\'s credibility.', a:'over' },
+  { type:'fill', q:'He was <strong>charged</strong> ___ embezzlement and fraud.', a:'with' },
+  { type:'fill', q:'The committee agreed ___ a compromise after six hours.', a:'on' },
+  { type:'fill', q:'At a loss ___ words, she simply sat down.', a:'for' },
+  { type:'fill', q:'The new legislation is <strong>at odds</strong> ___ existing human rights frameworks.', a:'with' },
+  { type:'fill', q:'She has a <strong>flair</strong> ___ turning complex ideas into simple prose.', a:'for' },
+  { type:'fill', q:'He was <strong>oblivious</strong> ___ the tension in the room.', a:'to' },
+  { type:'fill', q:'The findings are <strong>consistent</strong> ___ earlier research.', a:'with' },
+  { type:'fill', q:'The campaign was <strong>aimed</strong> ___ reducing youth unemployment.', a:'at' },
+  { type:'fill', q:'She is <strong>intent</strong> ___ restructuring the entire department.', a:'on' },
+  { type:'fill', q:'The committee remains <strong>divided</strong> ___ this issue.', a:'on' },
+  { type:'fill', q:'He is <strong>renowned</strong> ___ his uncompromising stance on corruption.', a:'for' },
+  { type:'fill', q:'The decision was made <strong>in defiance</strong> ___ expert advice.', a:'of' },
+  { type:'fill', q:'The new director is <strong>accountable</strong> ___ the board of trustees.', a:'to' },
+  { type:'fill', q:'The report drew <strong>attention</strong> ___ several systemic failures.', a:'to' },
+  { type:'mc', q:'The committee was <strong>tasked</strong> ___ reviewing the entire regulatory framework.', options:['with','for','by','to'], a:'with' },
+  { type:'mc', q:'Her promotion was <strong>contingent</strong> ___ the successful completion of the project.', options:['on','upon','of','to'], a:'on', hint:'"Contingent on/upon" = depending on.' },
+  { type:'mc', q:'There was no <strong>precedent</strong> ___ such a drastic measure.', options:['for','of','in','to'], a:'for' },
+  { type:'mc', q:'The results were <strong>in keeping</strong> ___ the company\'s projections.', options:['with','to','by','from'], a:'with' },
+  { type:'mc', q:'She is <strong>susceptible</strong> ___ flattery, which makes her easy to manipulate.', options:['to','of','by','for'], a:'to' },
+  { type:'mc', q:'The two proposals are <strong>mutually exclusive</strong> — you can\'t subscribe ___ both simultaneously.', options:['to','for','with','into'], a:'to' },
+  { type:'mc', q:'The minister was <strong>complicit</strong> ___ covering up the scandal.', options:['in','with','to','of'], a:'in' },
+  { type:'mc', q:'His career trajectory stands ___ stark contrast to his humble beginnings.', options:['in','at','with','on'], a:'in' },
+  { type:'mc', q:'The law is designed to <strong>clamp down</strong> ___ financial misconduct.', options:['on','at','over','upon'], a:'on' },
+  { type:'mc', q:'He is well-versed ___ the intricacies of international tax law.', options:['in','with','on','at'], a:'in' },
+  { type:'fill', q:'The CEO resigned <strong>in the wake</strong> ___ the accounting scandal.', a:'of' },
+  { type:'fill', q:'The proposal fell short ___ the required standards.', a:'of' },
+  { type:'fill', q:'She takes great <strong>pride</strong> ___ her ability to remain impartial.', a:'in' },
+  { type:'fill', q:'The decision was <strong>fraught</strong> ___ unintended consequences.', a:'with', hint:'"Fraught with" = full of (negative things).' },
+  { type:'fill', q:'The verdict was <strong>subject</strong> ___ appeal.', a:'to' },
+],
+phrasal: [
+  { type:'mc', q:'The government tried to <strong>hush</strong> ___ the scandal, but journalists had already published.', options:['up','over','down','out'], a:'up' },
+  { type:'mc', q:'She managed to <strong>talk</strong> her colleagues ___ to her point of view.', options:['round','over','across','up'], a:'round', hint:'"Talk someone round" (BrE) = persuade.' },
+  { type:'mc', q:'The report doesn\'t <strong>square</strong> ___ what the witnesses claimed.', options:['with','up','to','out'], a:'with' },
+  { type:'mc', q:'The CEO\'s resignation <strong>set</strong> ___ a chain reaction at board level.', options:['off','out','up','in'], a:'off' },
+  { type:'mc', q:'We need to <strong>iron</strong> ___ a few remaining issues before we sign.', options:['out','over','up','away'], a:'out' },
+  { type:'mc', q:'Her talent for persuasion <strong>counts</strong> ___ a lot in high-stakes negotiations.', options:['for','as','to','at'], a:'for' },
+  { type:'mc', q:'Opposition MPs tried to <strong>whittle</strong> ___ the government\'s majority.', options:['down','away','back','off'], a:'down' },
+  { type:'fill', q:'The investigation was <strong>called</strong> ___ due to lack of evidence.', a:'off', hint:'"Call off" = cancel.' },
+  { type:'fill', q:'She eventually <strong>came</strong> ___ to accepting the new terms.', a:'round', hint:'"Come round to" = gradually accept.' },
+  { type:'fill', q:'The committee <strong>drew</strong> ___ a comprehensive set of guidelines.', a:'up', hint:'"Draw up" = prepare a formal document.' },
+  { type:'fill', q:'His initial enthusiasm quickly <strong>wore</strong> ___.', a:'off', hint:'"Wear off" = gradually diminish.' },
+  { type:'fill', q:'The rumours were eventually <strong>played</strong> ___ by the spokesperson.', a:'down', hint:'"Play down" = minimise the significance.' },
+  { type:'fill', q:'The young lawyer <strong>looked</strong> ___ to the senior partners as role models.', a:'up', hint:'"Look up to" = admire and respect.' },
+  { type:'fill', q:'The scandal <strong>blew</strong> ___ after a whistleblower leaked the documents.', a:'up', hint:'"Blow up" = suddenly become serious/public.' },
+  { type:'mc', q:'The board <strong>put</strong> the decision ___ until the next quarterly meeting.', options:['off','back','up','over'], a:'off' },
+  { type:'mc', q:'She <strong>came up</strong> ___ an ingenious solution to the budget problem.', options:['with','against','for','to'], a:'with' },
+  { type:'mc', q:'The reforms were <strong>watered</strong> ___ after fierce lobbying from industry.', options:['down','back','off','out'], a:'down' },
+  { type:'mc', q:'He <strong>glossed</strong> ___ the most controversial aspects of the report.', options:['over','up','through','past'], a:'over' },
+  { type:'fill', q:'She <strong>stood</strong> ___ for her principles despite enormous pressure to comply.', a:'up', hint:'"Stand up for" = defend.' },
+  { type:'fill', q:'The project <strong>fell</strong> ___ due to a lack of funding.', a:'through', hint:'"Fall through" = fail to happen.' },
+  { type:'fill', q:'The manager <strong>backed</strong> ___ from her initial position after the board\'s reaction.', a:'down', hint:'"Back down" = withdraw under pressure.' },
+  { type:'fill', q:'He tends to <strong>talk</strong> ___ his problems rather than face them.', a:'around', hint:'"Talk around" = avoid the real issue.' },
+  { type:'mc', q:'The new evidence <strong>bears</strong> ___ the prosecution\'s theory.', options:['out','on','up','with'], a:'out', hint:'"Bear out" = confirm or support.' },
+  { type:'mc', q:'She <strong>took</strong> the criticism ___ rather than responding defensively.', options:['on board','in stride','up front','to heart'], a:'on board' },
+],
+collocations: [
+  { type:'mc', q:'The prime minister carried ___ a radical reshuffle of the cabinet.', options:['out','over','on','through'], a:'out' },
+  { type:'fill', q:'The report drew <strong>sweeping</strong> ___ that many experts considered premature.', a:'conclusions' },
+  { type:'mc', q:'The charity ___ a tight budget while expanding its reach.', options:['operates on','works from','runs at','functions with'], a:'operates on' },
+  { type:'fill', q:'The documentary shed ___ on a largely forgotten period of history.', a:'light' },
+  { type:'mc', q:'The proposed law is fundamentally ___ odds with existing legislation.', options:['at','in','on','by'], a:'at' },
+  { type:'fill', q:'His formative years abroad deeply ___ his political outlook.', a:'shaped' },
+  { type:'mc', q:'The scandal ___ serious questions about the regulator\'s independence.', options:['raises','makes','brings','poses'], a:'raises' },
+  { type:'mc', q:'The board reached a ___ decision after several months of deliberation.', options:['unanimous','united','shared','joint'], a:'unanimous' },
+  { type:'fill', q:'She <strong>struck</strong> a ___ between firmness and compassion in her leadership.', a:'balance' },
+  { type:'fill', q:'The government is under enormous ___ to reduce the deficit.', a:'pressure' },
+  { type:'mc', q:'The new policy will ___ a significant burden on small businesses.', options:['place','put','impose','lay'], a:'impose' },
+  { type:'mc', q:'His speech ___ a powerful impression on the delegates.', options:['made','left','gave','had'], a:'left' },
+  { type:'fill', q:'The decision has far-<strong>reaching</strong> ___ for the entire sector.', a:'implications' },
+  { type:'fill', q:'The two leaders <strong>reached</strong> an ___ on the key points.', a:'agreement' },
+  { type:'mc', q:'She ___ a compelling case for reforming the system.', options:['made','argued','gave','presented'], a:'made' },
+  { type:'mc', q:'The evidence was ___ conclusive — there was no room for doubt.', options:['utterly','deeply','completely','absolutely'], a:'utterly' },
+  { type:'mc', q:'The reforms were met with <strong>fierce</strong> ___ from the opposition.', options:['resistance','opposition','pushback','criticism'], a:'opposition' },
+  { type:'fill', q:'She gave a ___ account of what had transpired during the meeting.', a:'detailed' },
+  { type:'mc', q:'The ruling ___ serious doubt on the legality of the previous convictions.', options:['casts','throws','puts','places'], a:'casts' },
+  { type:'fill', q:'His remarks were taken <strong>out of</strong> ___.', a:'context' },
+  { type:'mc', q:'The senator ___ the blame for the failure squarely on the regulator.', options:['laid','put','placed','threw'], a:'laid' },
+  { type:'fill', q:'The two companies are in direct ___ for the same government contract.', a:'competition' },
+],
+idioms: [
+  { type:'mc', q:'"The minister has been <strong>sitting on the fence</strong> on immigration reform." This means she is:', options:['avoiding taking a position','actively debating','opposing reform','in favour of change'], a:'avoiding taking a position' },
+  { type:'fill', q:'The reforms opened a <strong>can</strong> of ___ that the government is still trying to deal with.', a:'worms' },
+  { type:'fill', q:'She didn\'t ___ around the bush — she told him he was being demoted.', a:'beat' },
+  { type:'mc', q:'"After months of talks, the union finally had the <strong>upper hand</strong>." This means:', options:['an advantage','more members','a better lawyer','finished the talks'], a:'an advantage' },
+  { type:'mc', q:'The CEO said the company would "<strong>weather the storm</strong>". This means it would:', options:['survive the crisis','change strategy','go bankrupt','seek a merger'], a:'survive the crisis' },
+  { type:'fill', q:'His proposal didn\'t go down well — in fact, it went ___ like a lead balloon.', a:'down' },
+  { type:'mc', q:'"She <strong>burned her bridges</strong> when she leaked the documents." She:', options:['destroyed future relationships','was promoted','regretted her decision','was fired'], a:'destroyed future relationships' },
+  { type:'mc', q:'"Let\'s not <strong>reinvent the wheel</strong>." This means we should:', options:['use what already works','be more creative','start from scratch','focus on innovation'], a:'use what already works' },
+  { type:'fill', q:'The chairman called for calm — he said there was no point in <strong>rocking</strong> the ___.', a:'boat' },
+  { type:'mc', q:'The treasurer said the company\'s finances were "<strong>in the red</strong>". This means:', options:['losing money','profitable','under audit','expanding'], a:'losing money' },
+  { type:'mc', q:'"He <strong>pulled strings</strong> to get the contract." He:', options:['used connections or influence','worked hard','negotiated skillfully','bribed officials'], a:'used connections or influence' },
+  { type:'fill', q:'The deal was sealed in the <strong>eleventh</strong> ___, moments before the deadline expired.', a:'hour' },
+  { type:'fill', q:'The two rival companies have now <strong>buried</strong> the ___ and agreed to collaborate.', a:'hatchet' },
+  { type:'mc', q:'"Her latest proposal is a real <strong>double-edged sword</strong>." This means:', options:['it has both advantages and risks','it is very sharp','it is unfair','it solves everything'], a:'it has both advantages and risks' },
+  { type:'mc', q:'"The government is <strong>skating on thin ice</strong> with this policy." It is:', options:['taking a big risk','being careless','moving forward','being transparent'], a:'taking a big risk' },
+  { type:'fill', q:'The two ministers have been at <strong>loggerheads</strong> over the budget — they simply cannot ___ eye to eye.', a:'see' },
+  { type:'mc', q:'"The board decided to <strong>bite the bullet</strong> and cut 500 jobs." They:', options:['accepted a painful decision','made a hasty decision','avoided the problem','consulted employees'], a:'accepted a painful decision' },
+  { type:'mc', q:'"Her proposal is <strong>pie in the sky</strong>." It is:', options:['unrealistically optimistic','ambitious but feasible','worth considering','expensive'], a:'unrealistically optimistic' },
+  { type:'fill', q:'The inquiry was a real <strong>witch</strong> ___, targeting individuals with no solid evidence.', a:'hunt' },
+  { type:'fill', q:'He tends to <strong>pass the buck</strong> — he never takes ___ for his own decisions.', a:'responsibility' },
+],
+fixed: [
+  { type:'mc', q:'___ the evidence available, it would be premature to draw firm conclusions.', options:['Given','Because of','Due to','Since'], a:'Given' },
+  { type:'fill', q:'Notwithstanding the above, it is ___ noting that several exceptions apply.', a:'worth' },
+  { type:'mc', q:'The project ran over budget. ___, the outcomes exceeded all expectations.', options:['That said','Moreover','To that end','In addition'], a:'That said' },
+  { type:'fill', q:'The decision was made in ___ of the expert committee\'s recommendation.', a:'defiance' },
+  { type:'mc', q:'The allegations, ___ proven, could irreparably damage the firm\'s reputation.', options:['if substantiated','in case proven','when confirmed','once proved'], a:'if substantiated' },
+  { type:'mc', q:'The decision was taken ___ the advice of the legal team.', options:['against','despite','contrary','in spite'], a:'against' },
+  { type:'fill', q:'The company, <strong>for all intents and</strong> ___, has ceased to operate.', a:'purposes' },
+  { type:'mc', q:'The committee was ___ no illusions about the scale of the challenge ahead.', options:['under','with','in','at'], a:'under' },
+  { type:'mc', q:'___ from a few minor inconsistencies, the report is thorough and well-researched.', options:['Apart','Aside','Other','Except'], a:'Apart' },
+  { type:'fill', q:'The findings are open to ___ — different researchers may interpret them differently.', a:'interpretation' },
+  { type:'mc', q:'He spoke ___ to the point — no preamble, no hedging.', options:['straight','directly','bluntly','frankly'], a:'straight' },
+  { type:'fill', q:'The policy represents a <strong>paradigm</strong> ___ in how the state approaches welfare.', a:'shift' },
+  { type:'mc', q:'She passed the exam with ___ colours, achieving the highest score in her cohort.', options:['flying','bright','glowing','shining'], a:'flying' },
+  { type:'fill', q:'His position has been <strong>untenable</strong> ___ some time now.', a:'for' },
+  { type:'mc', q:'Her analysis was ___ the mark — it failed to address the core issue.', options:['wide of','far from','short of','out of'], a:'wide of' },
+  { type:'mc', q:'The audit revealed that corners had been ___ throughout the construction process.', options:['cut','shaved','clipped','trimmed'], a:'cut' },
+  { type:'fill', q:'There is no ___ for such gross negligence.', a:'excuse' },
+  { type:'fill', q:'The minister was accused of giving a <strong>watered-down</strong> ___ of the truth.', a:'version' },
+],
+wordformation: [
+  { type:'fill', q:'Despite the setbacks, she remained utterly ___DETERRED___ and pushed forward. (DETER)', a:'undeterred' },
+  { type:'mc', q:'The committee expressed grave ___ about the proposed changes. (RESERVE)', options:['reservations','reserves','reservedness','reserving'], a:'reservations' },
+  { type:'fill', q:'The scientist\'s findings were met with deep ___SKEPT___. (SCEPTIC)', a:'scepticism' },
+  { type:'mc', q:'His ___ of the situation proved to be entirely accurate. (ASSESS)', options:['assessment','assessing','assessibility','assessor'], a:'assessment' },
+  { type:'fill', q:'The merger created an ___ powerful media conglomerate. (PRECEDENT)', a:'unprecedented' },
+  { type:'mc', q:'The director was known for her ___ of opinion. (STRONG)', options:['strongness','stronghold','strength','strengthening'], a:'strength' },
+  { type:'fill', q:'The new regulations will impose significant ___ on businesses. (CONSTRAIN)', a:'constraints' },
+  { type:'mc', q:'His ___ handling of the crisis drew widespread criticism. (INEPT)', options:['ineptitude','ineptness','ineptly','ineptitude'], a:'ineptitude' },
+  { type:'fill', q:'There is a certain ___ to the minister\'s position that critics have noted. (INCOHERE)', a:'incoherence' },
+  { type:'mc', q:'The policy was seen as ___ — it solved one problem while creating three others. (COUNTER)', options:['counterproductive','counterable','counteracted','counterfeit'], a:'counterproductive' },
+  { type:'fill', q:'Her ___ to compromise made the negotiations extremely difficult. (UNWILL)', a:'unwillingness' },
+  { type:'mc', q:'The rise of automation has led to widespread economic ___. (DISPLACE)', options:['displacement','displacing','displacedness','displacements'], a:'displacement' },
+  { type:'fill', q:'The senator\'s remarks were widely criticised for their ___TACT___. (TACT)', a:'tactlessness' },
+  { type:'mc', q:'The project\'s ___ has been called into question. (FEASIBLE)', options:['feasibility','feasibleness','feasibly','feasiblility'], a:'feasibility' },
+  { type:'fill', q:'The ___ of the two companies was announced at a press conference. (MERGE)', a:'merger' },
+  { type:'mc', q:'The attorney launched a scathing ___ of the prosecution\'s case. (REBUT)', options:['rebuttal','rebuttance','rebuttment','rebutting'], a:'rebuttal' },
+],
+error: [
+  { type:'error', sentence:'Despite of the evidence, the board refused to act.', correction:'Despite the evidence', explanation:'"Despite" is never followed by "of". "In spite of" uses "of", but not "despite".' },
+  { type:'error', sentence:'She suggested to reconsider the proposal before the deadline.', correction:'suggested reconsidering', explanation:'"Suggest" takes a gerund (-ing), not an infinitive.' },
+  { type:'error', sentence:'The data shows that unemployment is raising.', correction:'is rising', explanation:'"Rise" is intransitive (no object). "Raise" requires an object.' },
+  { type:'error', sentence:'I look forward to hear from you at your earliest convenience.', correction:'to hearing', explanation:'"Look forward to" is followed by a gerund, not infinitive.' },
+  { type:'error', sentence:'The report consists of three mains sections.', correction:'main sections', explanation:'"Main" is an adjective and does not take a plural -s.' },
+  { type:'error', sentence:'She made me to reconsider the entire strategy.', correction:'made me reconsider', explanation:'Causative "make" takes a bare infinitive (no "to").' },
+  { type:'error', sentence:'The committee was laid with the responsibility of oversight.', correction:'charged with / tasked with', explanation:'"Laid with" is not standard. Use "charged with" or "tasked with".' },
+  { type:'error', sentence:'Hardly he had arrived when the meeting began.', correction:'Hardly had he arrived', explanation:'Inversion required after "hardly" at the start of a sentence.' },
+  { type:'error', sentence:'The policy has far-reaching effects in unemployment.', correction:'on unemployment', explanation:'"Effects on" something — not "in".' },
+  { type:'error', sentence:'She is used to work under pressure.', correction:'used to working', explanation:'"Be used to" is followed by a gerund.' },
+  { type:'error', sentence:'The proposal was both illogical as well as poorly costed.', correction:'both illogical and poorly costed', explanation:'"Both...and..." is the correct correlative conjunction.' },
+  { type:'error', sentence:'I would have preferred if they informed me in advance.', correction:'had informed me', explanation:'After "would have preferred", use a past perfect in the subordinate clause.' },
+  { type:'error', sentence:'The research sheds a light on previously overlooked factors.', correction:'sheds light on', explanation:'"Shed light on" has no article — it\'s a fixed expression.' },
+  { type:'error', sentence:'He was accused for misappropriating public funds.', correction:'accused of', explanation:'"Accused of" — not "for".' },
+  { type:'error', sentence:'The decision is opened to interpretation.', correction:'open to interpretation', explanation:'"Open to interpretation" — adjective "open", not past participle "opened".' },
+  { type:'error', sentence:'Not only she lied, but she also destroyed the evidence.', correction:'Not only did she lie', explanation:'Inversion required after "Not only" at the start of a clause.' },
+  { type:'error', sentence:'The chairman made a speech consisting in three parts.', correction:'consisting of', explanation:'"Consist of" — not "in".' },
+  { type:'error', sentence:'They were able to rise enough capital for the venture.', correction:'raise enough capital', explanation:'"Raise capital" is the correct collocation. "Rise" is intransitive.' },
+],
+transformation: [
+  { type:'transform', original:'It is essential that she submits the report on time.', keyword:'IMPERATIVE', clue:'Rewrite using "imperative" in a formal structure.', answer:'It is imperative that she submit(s) the report on time.' },
+  { type:'transform', original:'They believe the CEO deliberately misled shareholders.', keyword:'ALLEGED', clue:'Make the claim tentative using a passive construction.', answer:'The CEO is alleged to have deliberately misled shareholders.' },
+  { type:'transform', original:'He did not feel any regret about leaving the company.', keyword:'COMPUNCTION', clue:'Use the noun "compunction" (= hesitation, guilt).', answer:'He felt no compunction about leaving the company.' },
+  { type:'transform', original:'Nobody could have predicted the scale of the disaster.', keyword:'FORESEEN', clue:'Passive with modal perfects.', answer:'The scale of the disaster could not have been foreseen.' },
+  { type:'transform', original:'She is too proud to admit that she was wrong.', keyword:'PRIDE', clue:'Use "her pride prevents her from..."', answer:'Her pride prevents her from admitting she was wrong.' },
+  { type:'transform', original:'The reforms were less effective than the government had hoped.', keyword:'FELL', clue:'"Fall short of" — the reforms fell short of expectations.', answer:'The reforms fell short of the government\'s hopes/expectations.' },
+  { type:'transform', original:'He only agreed because he was under enormous pressure.', keyword:'DURESS', clue:'"Under duress" = under pressure/coercion.', answer:'He only agreed under duress.' },
+  { type:'transform', original:'Many people think that the minister acted unethically.', keyword:'WIDELY', clue:'Passive + adverb: "is widely believed/considered..."', answer:'The minister is widely believed/considered to have acted unethically.' },
+  { type:'transform', original:'The project was cancelled because it would have cost too much.', keyword:'PROHIBITIVE', clue:'"Prohibitive cost" = too expensive.', answer:'The project was cancelled due to the prohibitive cost.' },
+  { type:'transform', original:'The two proposals cannot both be accepted.', keyword:'MUTUALLY', clue:'"Mutually exclusive" = cannot coexist.', answer:'The two proposals are mutually exclusive.' },
+  { type:'transform', original:'It is very unlikely that prices will fall this year.', keyword:'REMOTE', clue:'"Remote possibility/chance" = very unlikely.', answer:'There is a remote possibility that prices will fall this year.' },
+  { type:'transform', original:'The two countries\' interests are completely different.', keyword:'DIVERGE', clue:'"Interests diverge sharply/significantly."', answer:'The two countries\' interests diverge significantly.' },
+  { type:'transform', original:'The minister refused to explain the delay.', keyword:'ACCOUNT', clue:'"Account for" = explain.', answer:'The minister refused to account for the delay.' },
+],
+register: [
+  { type:'mc', q:'Which is the most formal way to say "We need to talk about the budget"?', options:['The budget warrants our urgent attention.','We gotta discuss the budget.','The budget needs talking about.','Let\'s chat about the budget.'], a:'The budget warrants our urgent attention.' },
+  { type:'mc', q:'Which option best replaces "<strong>get worse</strong>" in a formal report?', options:['deteriorate','go downhill','get bad','worsen up'], a:'deteriorate' },
+  { type:'mc', q:'Replace "<strong>find out</strong>" with a formal verb: "Investigators will ___ the cause."', options:['ascertain','figure out','work out','dig up'], a:'ascertain' },
+  { type:'mc', q:'Which word most formally replaces "<strong>use</strong>" in: "We should ___ all available resources."?', options:['utilise','make use of','use up','employ'], a:'utilise' },
+  { type:'mc', q:'"The new law will <strong>start</strong> next month." Choose the most formal replacement:', options:['come into effect','kick in','start up','get going'], a:'come into effect' },
+  { type:'mc', q:'Formal equivalent of "<strong>get rid of</strong> the old system":', options:['abolish','throw away','ditch','scrap'], a:'abolish' },
+  { type:'mc', q:'Formal equivalent of "<strong>look into</strong> the allegations":', options:['investigate','check out','look at','probe into'], a:'investigate' },
+  { type:'fill', q:'Her recommendation was ___ by the board, who felt it was impractical. (formal for "turned down")', a:'rejected' },
+  { type:'mc', q:'Formal equivalent of "<strong>go up</strong>" in: "Costs have ___ significantly this quarter."', options:['escalated','gone up','shot up','jumped'], a:'escalated' },
+  { type:'mc', q:'Formal replacement for "<strong>put off</strong>": "The meeting has been ___."', options:['postponed','put off','delayed back','rescheduled back'], a:'postponed' },
+  { type:'fill', q:'The minister ___ that further cuts were unavoidable. (formal for "said")', a:'acknowledged' },
+  { type:'mc', q:'Most formal way to say "<strong>agree with</strong>": "The data ___ the hypothesis."', options:['corroborates','backs up','goes with','fits'], a:'corroborates' },
+],
+confusables: [
+  { type:'mc', q:'"The company\'s financial ___ is worse than last year." AFFECT or EFFECT?', options:['effect','affect'], a:'effect' },
+  { type:'mc', q:'"The scandal will ___ the company\'s reputation." AFFECT or EFFECT?', options:['affect','effect'], a:'affect' },
+  { type:'mc', q:'"There were ___ participants than expected." FEWER or LESS?', options:['fewer','less'], a:'fewer' },
+  { type:'mc', q:'"___ the report was incomplete, it contained valuable insights." ALTHOUGH or DESPITE?', options:['Although','Despite'], a:'Although' },
+  { type:'mc', q:'"The board ___ to approve the merger unanimously." AGREED or ACCEPTED?', options:['agreed','accepted'], a:'agreed' },
+  { type:'mc', q:'"She ___ a very influential role in the negotiations." PLAYED or MADE?', options:['played','made'], a:'played' },
+  { type:'mc', q:'"The policy will ___ in significant changes." RESULT or CAUSE?', options:['result','cause'], a:'result' },
+  { type:'mc', q:'"The findings ___ a need for reform." IMPLY or INFER?', options:['imply','infer'], a:'imply' },
+  { type:'mc', q:'"The minister ___ responsibility for the failure." ACCEPTED or ADMITTED?', options:['accepted','admitted'], a:'accepted' },
+  { type:'mc', q:'"The company\'s losses were ___." ECONOMIC or ECONOMICAL?', options:['economic','economical'], a:'economic' },
+  { type:'mc', q:'"She gave a very ___ account of the meeting." COMPREHENSIVE or COMPREHENSIBLE?', options:['comprehensive','comprehensible'], a:'comprehensive' },
+  { type:'mc', q:'"The decision had ___ consequences." FARTHER or FURTHER?', options:['further','farther'], a:'further' },
+  { type:'mc', q:'"He was ___ by the complexity of the problem." DAUNTED or DAUNTING?', options:['daunted','daunting'], a:'daunted' },
+]
+};
+
+// ══════════════════════════════════════════════════════════
+//  THEORY DATABASE
+// ══════════════════════════════════════════════════════════
+
+const THEORY = {
+
+prep: {
+  title: 'Prepositions',
+  intro: 'Prepositions at C1/C2 level are largely idiomatic — the logic is fixed and must be memorised as chunks. These patterns appear constantly in formal writing, academic prose, legal language, and professional speech.',
+  entries: [
+    { term:'tantamount to', pos:'adj phrase', meaning:'Equivalent to; virtually the same as. Almost always negative.', examples:['His silence was <em>tantamount to</em> an admission of guilt.','Refusing to cooperate is <em>tantamount to</em> obstruction.'], note:'Always followed by a noun or gerund. "Tantamount of" is always wrong.' },
+    { term:'contingent on / upon', pos:'adj phrase', meaning:'Depending on a condition being met first.', examples:['Her appointment is <em>contingent on</em> board approval.','The funding is <em>contingent upon</em> successful completion of phase one.'] },
+    { term:'in the wake of', pos:'prep phrase', meaning:'After and as a result of. Used almost exclusively for negative events.', examples:['Protests erupted <em>in the wake of</em> the verdict.','Several reforms followed <em>in the wake of</em> the financial crisis.'] },
+    { term:'complicit in', pos:'adj + prep', meaning:'Involved in and sharing responsibility for wrongdoing.', examples:['The auditors were found to be <em>complicit in</em> the fraud.','She was accused of being <em>complicit in</em> covering up the results.'] },
+    { term:'fraught with', pos:'adj + prep', meaning:'Full of something unpleasant or difficult.', examples:['The negotiation was <em>fraught with</em> tension.','The plan is <em>fraught with</em> potential pitfalls.'], note:'Only collocates with negative nouns: danger, tension, difficulty, risk.' },
+    { term:'at odds with', pos:'prep phrase', meaning:'In conflict or disagreement with.', examples:['His testimony is <em>at odds with</em> the documentary evidence.','The policy is fundamentally <em>at odds with</em> EU law.'] },
+    { term:'in stark contrast to', pos:'prep phrase', meaning:'Very noticeably different from.', examples:['Her relaxed manner stood <em>in stark contrast to</em> her predecessor\'s formality.'] },
+    { term:'subject to', pos:'adj + prep', meaning:'Dependent on; liable to; under the authority of.', examples:['The verdict is <em>subject to</em> appeal.','All employees are <em>subject to</em> the code of conduct.'] },
+    { term:'in defiance of', pos:'prep phrase', meaning:'Despite; openly resisting or ignoring.', examples:['The protest continued <em>in defiance of</em> a police ban.','She published <em>in defiance of</em> a court injunction.'] },
+    { term:'well-versed in', pos:'adj phrase', meaning:'Having thorough knowledge or extensive experience of.', examples:['She is <em>well-versed in</em> constitutional law.','He is <em>well-versed in</em> the complexities of the conflict.'] },
+    { term:'susceptible to', pos:'adj + prep', meaning:'Likely to be influenced, harmed, or affected by.', examples:['Children are particularly <em>susceptible to</em> peer pressure.','The system is <em>susceptible to</em> manipulation.'] },
+    { term:'oblivious to', pos:'adj + prep', meaning:'Unaware of; not noticing or being affected by.', examples:['He seemed entirely <em>oblivious to</em> the effect his words had.'] },
+    { term:'in keeping with', pos:'prep phrase', meaning:'In accordance with; consistent with.', examples:['The decision was <em>in keeping with</em> the company\'s values.','The architecture is <em>in keeping with</em> the surrounding area.'], note:'Opposite: "out of keeping with".' },
+    { term:'accountable to / for', pos:'adj + prep', meaning:'"Accountable to" a person/body. "Accountable for" an action or result.', examples:['The minister is <em>accountable to</em> Parliament.','The board is <em>accountable for</em> its decisions.'] },
+    { term:'fall short of', pos:'verb phrase', meaning:'To fail to reach a required standard or expectation.', examples:['The results <em>fell short of</em> expectations.','Her performance <em>fell short of</em> what the role required.'] },
+    { term:'in light of', pos:'prep phrase', meaning:'Taking into consideration; given.', examples:['<em>In light of</em> recent events, the policy needs urgent revision.','The board reconsidered its position <em>in light of</em> the new evidence.'] },
+    { term:'akin to', pos:'adj phrase', meaning:'Similar to; of the same kind as.', examples:['The experience was <em>akin to</em> being thrown in at the deep end.','His approach is <em>akin to</em> improvisation rather than strategy.'] },
+    { term:'pursuant to', pos:'prep phrase (legal)', meaning:'In accordance with; following from.', examples:['<em>Pursuant to</em> our earlier agreement, payment is now due.','<em>Pursuant to</em> section 4 of the Act, the authority may impose a fine.'], note:'Exclusively formal/legal register.' },
+    { term:'commensurate with', pos:'adj phrase', meaning:'In proportion to; appropriate to.', examples:['The salary is <em>commensurate with</em> experience.','The punishment should be <em>commensurate with</em> the severity of the offence.'] },
+    { term:'incumbent on', pos:'adj phrase', meaning:'Being the duty or responsibility of; obligatory for.', examples:['It is <em>incumbent on</em> the government to act.','It is <em>incumbent upon</em> all professionals to maintain confidentiality.'], note:'"It is incumbent on/upon sb to do sth" is the fixed construction.' },
+    { term:'at the behest of', pos:'prep phrase', meaning:'At the command or request of.', examples:['The investigation was launched <em>at the behest of</em> the prime minister.','Changes were made <em>at the behest of</em> major shareholders.'] },
+    { term:'in the aftermath of', pos:'prep phrase', meaning:'After and as a result of a difficult or catastrophic event.', examples:['<em>In the aftermath of</em> the earthquake, thousands were left homeless.'] },
+    { term:'on the grounds that / of', pos:'prep phrase', meaning:'Using something as a reason or justification.', examples:['The application was rejected <em>on the grounds that</em> it was incomplete.','She resigned <em>on the grounds of</em> ill health.'] },
+    { term:'in the guise of', pos:'prep phrase', meaning:'Appearing as; disguised or presented as something else.', examples:['Propaganda was spread <em>in the guise of</em> factual reporting.','The cuts were presented <em>in the guise of</em> reform.'] },
+    { term:'by virtue of', pos:'prep phrase', meaning:'Because of; by reason of.', examples:['She holds the position <em>by virtue of</em> her seniority.','<em>By virtue of</em> its location, the town has strategic importance.'] },
+    { term:'in conjunction with', pos:'prep phrase', meaning:'Together with; in combination with.', examples:['The drug is most effective <em>in conjunction with</em> physiotherapy.','The policy was developed <em>in conjunction with</em> local authorities.'] },
+    { term:'with a view to', pos:'prep phrase', meaning:'With the intention or aim of (+ gerund).', examples:['He took the course <em>with a view to</em> improving his prospects.','Talks were opened <em>with a view to</em> a negotiated settlement.'] },
+    { term:'at the expense of', pos:'prep phrase', meaning:'With the sacrifice of; to the detriment of.', examples:['Growth was achieved <em>at the expense of</em> workers\' rights.','Speed was prioritised <em>at the expense of</em> accuracy.'] },
+    { term:'in lieu of', pos:'prep phrase', meaning:'Instead of; in place of (formal).', examples:['He received shares <em>in lieu of</em> a cash bonus.','Candidates may submit a portfolio <em>in lieu of</em> an examination.'] },
+    { term:'for the sake of', pos:'prep phrase', meaning:'For the purpose of; in order to achieve or preserve.', examples:['<em>For the sake of</em> clarity, let me summarise the main points.','They stayed together <em>for the sake of</em> the children.'] },
+    { term:'predisposed to / towards', pos:'adj + prep', meaning:'Having a tendency or inclination towards something.', examples:['She is <em>predisposed to</em> pessimism.','Some individuals are genetically <em>predisposed towards</em> certain conditions.'] },
+    { term:'in breach of', pos:'prep phrase', meaning:'Acting contrary to; violating a law, rule, or agreement.', examples:['The company was found to be <em>in breach of</em> its contractual obligations.','This decision is <em>in breach of</em> international law.'] },
+    { term:'irrespective of', pos:'prep phrase', meaning:'Without being affected by; regardless of.', examples:['All employees are covered, <em>irrespective of</em> their contract type.','The law applies equally, <em>irrespective of</em> status or wealth.'] },
+    { term:'with respect to / with regard to', pos:'prep phrase', meaning:'Concerning; in relation to (formal).', examples:['<em>With respect to</em> the first point, I would like to raise a concern.','The situation <em>with regard to</em> funding remains unclear.'] },
+    { term:'in the context of', pos:'prep phrase', meaning:'Considering the wider situation surrounding something.', examples:['These figures must be understood <em>in the context of</em> the global recession.','<em>In the context of</em> rapid technological change, adaptability is essential.'] },
+    { term:'to the detriment of', pos:'prep phrase', meaning:'Causing harm or damage to.', examples:['Profits were maximised <em>to the detriment of</em> quality.','Short-term thinking operates <em>to the detriment of</em> long-term sustainability.'] },
+    { term:'in proportion to', pos:'prep phrase', meaning:'At a level that is relative to or consistent with.', examples:['Penalties should be <em>in proportion to</em> the severity of the offence.','Resources are distributed <em>in proportion to</em> need.'] },
+    { term:'short of', pos:'prep phrase', meaning:'Lacking; not reaching a level; except for.', examples:['<em>Short of</em> a complete overhaul, nothing will fix the system.','We are still two votes <em>short of</em> a majority.'] },
+    { term:'on behalf of', pos:'prep phrase', meaning:'As a representative of; for the benefit of.', examples:['I am writing <em>on behalf of</em> the entire committee.','The lawyer acted <em>on behalf of</em> the defendant.'] },
+    { term:'in the face of', pos:'prep phrase', meaning:'Despite; when confronted by (usually adversity).', examples:['She showed remarkable courage <em>in the face of</em> overwhelming opposition.','Progress was made <em>in the face of</em> considerable obstacles.'] },
+    { term:'contrary to', pos:'prep phrase', meaning:'In opposition to; opposite to what was expected.', examples:['<em>Contrary to</em> popular belief, the research does not support this conclusion.','<em>Contrary to</em> his earlier assurances, the project ran significantly over budget.'] },
+    { term:'in response to', pos:'prep phrase', meaning:'As a reply to or reaction to.', examples:['<em>In response to</em> the criticism, the government issued a detailed rebuttal.','New regulations were introduced <em>in response to</em> the crisis.'] },
+    { term:'under the auspices of', pos:'prep phrase', meaning:'With the support, sponsorship, or supervision of.', examples:['The talks were held <em>under the auspices of</em> the United Nations.','Research was conducted <em>under the auspices of</em> the university.'] },
+    { term:'at variance with', pos:'prep phrase', meaning:'In conflict or disagreement with; inconsistent with.', examples:['His public statements are <em>at variance with</em> his known private views.','The findings are <em>at variance with</em> previous research.'] },
+    { term:'to the exclusion of', pos:'prep phrase', meaning:'Leaving out; without considering.', examples:['He focused entirely on profit <em>to the exclusion of</em> all other values.','The policy was designed for one group <em>to the exclusion of</em> others.'] },
+    { term:'in the interests of', pos:'prep phrase', meaning:'For the benefit of; in order to serve.', examples:['<em>In the interests of</em> transparency, all records have been published.','<em>In the interests of</em> national security, certain information cannot be disclosed.'] },
+    { term:'on the premise that', pos:'prep phrase', meaning:'Based on the assumption that.', examples:['The entire argument is built <em>on the premise that</em> the data are reliable.','He acted <em>on the premise that</em> the consent had already been given.'] },
+  ]
+},
+
+phrasal: {
+  title: 'Phrasal Verbs',
+  intro: 'A comprehensive C2-level list of phrasal verbs. These cover all key meanings — including multiple meanings for the same verb — across formal, journalistic, academic, and professional contexts. C2 exams typically require passive recognition of around 300 phrasal verbs.',
+  entries: [
+    // ── A ──
+    { term:'account for', pos:'phrasal verb', meaning:'(1) To explain. (2) To make up a percentage or portion.', examples:['The CEO failed to <em>account for</em> the discrepancy in the accounts.','Tourism <em>accounts for</em> 12% of GDP.'] },
+    { term:'act on', pos:'phrasal verb', meaning:'To take action based on information, advice, or instructions.', examples:['The government was slow to <em>act on</em> the recommendations.','He <em>acted on</em> instinct rather than evidence.'] },
+    { term:'add up to', pos:'phrasal verb', meaning:'To amount to; to result in (figurative and literal).', examples:['The evidence <em>adds up to</em> a compelling case for reform.','The costs <em>add up to</em> well over a million pounds.'] },
+    { term:'adhere to', pos:'phrasal verb', meaning:'To follow or comply with a rule, principle, or plan strictly.', examples:['All contractors must <em>adhere to</em> the safety guidelines.','She has always <em>adhered to</em> her principles, even under pressure.'] },
+    { term:'amount to', pos:'phrasal verb', meaning:'To be equivalent to; to come to a total of.', examples:['His response <em>amounts to</em> a flat refusal.','The damages <em>amounted to</em> three million dollars.'] },
+    // ── B ──
+    { term:'back down', pos:'phrasal verb', meaning:'To withdraw from a position or confrontation under pressure.', examples:['The government was forced to <em>back down</em> on its austerity plans.','Neither side was willing to <em>back down</em>.'] },
+    { term:'back up', pos:'phrasal verb', meaning:'(1) To support or confirm. (2) To reverse a vehicle. (3) To create a copy of data.', examples:['The data <em>backs up</em> the original hypothesis.','Can you <em>back up</em> that claim with evidence?'] },
+    { term:'bear down on', pos:'phrasal verb', meaning:'To move purposefully towards; to exert pressure on.', examples:['Inspectors are <em>bearing down on</em> employers who fail to comply.','She felt the full weight of expectation <em>bearing down on</em> her.'] },
+    { term:'bear out', pos:'phrasal verb', meaning:'To confirm or support a claim or theory.', examples:['The data <em>bears out</em> the original hypothesis.','Her account was <em>borne out</em> by subsequent events.'] },
+    { term:'bear with', pos:'phrasal verb', meaning:'To tolerate; to be patient with.', examples:['Please <em>bear with</em> me while I explain the context.'] },
+    { term:'blow over', pos:'phrasal verb', meaning:'(Of a crisis or scandal) to pass and be forgotten.', examples:['The controversy <em>blew over</em> within a few weeks.','He hoped the scandal would <em>blow over</em> before the election.'] },
+    { term:'blow up', pos:'phrasal verb', meaning:'(1) To suddenly become a major issue. (2) To lose one\'s temper. (3) To explode.', examples:['The scandal <em>blew up</em> after a whistleblower leaked documents.','He completely <em>blew up</em> at the press conference.'] },
+    { term:'boil down to', pos:'phrasal verb', meaning:'To be reduced to the most essential point.', examples:['The whole debate <em>boils down to</em> one question: who bears the cost?','It all <em>boils down to</em> a lack of trust.'] },
+    { term:'branch out into', pos:'phrasal verb', meaning:'To expand into a new area of activity.', examples:['The company is <em>branching out into</em> renewable energy.','She <em>branched out into</em> consultancy after leaving the firm.'] },
+    { term:'bring about', pos:'phrasal verb', meaning:'To cause something to happen.', examples:['The reforms were intended to <em>bring about</em> lasting change.','What finally <em>brought about</em> the collapse of negotiations?'] },
+    { term:'bring forward', pos:'phrasal verb', meaning:'(1) To move to an earlier date. (2) To present for consideration.', examples:['The meeting has been <em>brought forward</em> to Monday.','She <em>brought forward</em> a number of proposals for review.'] },
+    { term:'bring in', pos:'phrasal verb', meaning:'(1) To introduce a law or policy. (2) To earn revenue. (3) To involve an outside party.', examples:['The government <em>brought in</em> new regulations on data privacy.','The merger <em>brought in</em> significant new revenue.','External consultants were <em>brought in</em> to review the process.'] },
+    { term:'bring off', pos:'phrasal verb', meaning:'To succeed in doing something difficult.', examples:['Against all odds, she <em>brought off</em> a remarkable turnaround.','It was a bold plan, and they actually <em>brought it off</em>.'] },
+    { term:'bring round', pos:'phrasal verb', meaning:'(1) To persuade someone. (2) To revive an unconscious person.', examples:['It took weeks to <em>bring the board round</em> to the new strategy.','The paramedics managed to <em>bring him round</em> at the scene.'] },
+    { term:'bring to light', pos:'phrasal verb', meaning:'To reveal something that was hidden or unknown.', examples:['The investigation <em>brought to light</em> a pattern of systematic fraud.','New documents have <em>brought to light</em> previously unknown facts.'] },
+    { term:'bring up', pos:'phrasal verb', meaning:'(1) To raise a topic. (2) To raise a child. (3) To vomit (informal).', examples:['She <em>brought up</em> the issue of funding at the meeting.','He was <em>brought up</em> in a strict household.'] },
+    { term:'brush aside', pos:'phrasal verb', meaning:'To dismiss or ignore something as unimportant.', examples:['The committee <em>brushed aside</em> all objections.','Her concerns were <em>brushed aside</em> by management.'] },
+    { term:'build on', pos:'phrasal verb', meaning:'To use something as a foundation for further development.', examples:['We must <em>build on</em> the progress already made.','The second phase <em>builds on</em> the findings of the first.'] },
+    { term:'build up', pos:'phrasal verb', meaning:'(1) To increase gradually. (2) To develop over time. (3) To praise someone.', examples:['Pressure has been <em>building up</em> for months.','She has <em>built up</em> an impressive portfolio of clients.'] },
+    // ── C ──
+    { term:'call for', pos:'phrasal verb', meaning:'(1) To demand or require. (2) To collect someone.', examples:['The situation <em>calls for</em> urgent action.','Opposition leaders are <em>calling for</em> the minister\'s resignation.'] },
+    { term:'call into question', pos:'phrasal verb', meaning:'To cause doubt about the validity or truth of something.', examples:['The new evidence <em>calls into question</em> the entire basis of the prosecution.','His impartiality has been <em>called into question</em>.'] },
+    { term:'call off', pos:'phrasal verb', meaning:'To cancel a planned event or action.', examples:['The strike was <em>called off</em> at the last minute.','The search was <em>called off</em> after three days.'] },
+    { term:'carry on', pos:'phrasal verb', meaning:'To continue.', examples:['Despite the setbacks, the project <em>carried on</em>.','<em>Carry on</em> with what you were doing.'] },
+    { term:'carry out', pos:'phrasal verb', meaning:'To perform or complete a task, plan, or instruction.', examples:['The government <em>carried out</em> a radical reshuffle.','The tests were <em>carried out</em> by an independent laboratory.'] },
+    { term:'carry over', pos:'phrasal verb', meaning:'To transfer or extend something to another period or context.', examples:['The budget surplus was <em>carried over</em> to the next financial year.','Old habits from the previous system have <em>carried over</em>.'] },
+    { term:'carry through', pos:'phrasal verb', meaning:'To complete something successfully despite difficulties.', examples:['She was determined to <em>carry through</em> the reforms she had promised.','Very few ambitious plans are <em>carried through</em> to completion.'] },
+    { term:'cave in', pos:'phrasal verb', meaning:'To yield to pressure; to give in.', examples:['After weeks of resistance, the government finally <em>caved in</em>.','He refused to <em>cave in</em> to the demands of the lobbyists.'] },
+    { term:'churn out', pos:'phrasal verb', meaning:'To produce large quantities of something quickly, often without care.', examples:['The factory was <em>churning out</em> cheap products to meet demand.','Some publishers simply <em>churn out</em> formulaic titles.'] },
+    { term:'clamp down on', pos:'phrasal verb', meaning:'To take strict action to prevent or control something.', examples:['The government intends to <em>clamp down on</em> tax avoidance.','Police have been <em>clamping down on</em> illegal street trading.'] },
+    { term:'close ranks', pos:'phrasal verb', meaning:'(Of a group) to unite and support each other against criticism or threat.', examples:['The party <em>closed ranks</em> around the embattled leader.','Management <em>closed ranks</em> and refused to comment.'] },
+    { term:'come about', pos:'phrasal verb', meaning:'To happen; to occur (often by chance or gradually).', examples:['How did such a misunderstanding <em>come about</em>?','The change <em>came about</em> as a result of sustained public pressure.'] },
+    { term:'come across', pos:'phrasal verb', meaning:'(1) To find or encounter by chance. (2) To give a particular impression.', examples:['I <em>came across</em> the document while clearing the archive.','She <em>comes across</em> as extremely confident in interviews.'] },
+    { term:'come apart', pos:'phrasal verb', meaning:'To fall to pieces; to disintegrate.', examples:['The coalition began to <em>come apart</em> after the second election.','Under questioning, his story <em>came apart</em>.'] },
+    { term:'come down to', pos:'phrasal verb', meaning:'To be essentially a matter of; to depend ultimately on.', examples:['It all <em>comes down to</em> trust.','Success often <em>comes down to</em> timing.'] },
+    { term:'come forward', pos:'phrasal verb', meaning:'To volunteer information or assistance, especially to authorities.', examples:['Several witnesses <em>came forward</em> after the appeal.','No one was willing to <em>come forward</em> and speak on the record.'] },
+    { term:'come into effect', pos:'phrasal verb', meaning:'(Of a law or rule) to begin to apply officially.', examples:['The new regulations <em>came into effect</em> on 1 April.','When will the legislation <em>come into effect</em>?'] },
+    { term:'come round to', pos:'phrasal verb', meaning:'To gradually change one\'s opinion and accept something.', examples:['He eventually <em>came round to</em> the idea.','It took months before the board <em>came round to</em> approving the restructure.'], note:'AmE: "come around to".' },
+    { term:'come to a head', pos:'phrasal verb', meaning:'(Of a problem) to reach a critical point requiring action.', examples:['Tensions finally <em>came to a head</em> at the annual general meeting.','The dispute <em>came to a head</em> when the CEO resigned.'] },
+    { term:'come to terms with', pos:'phrasal verb', meaning:'To accept a difficult or unpleasant situation.', examples:['She has yet to fully <em>come to terms with</em> the scale of the loss.','It took years to <em>come to terms with</em> the decision.'] },
+    { term:'come under', pos:'phrasal verb', meaning:'To be subjected to (pressure, fire, scrutiny, attack, etc.).', examples:['The policy has <em>come under</em> intense scrutiny.','The company <em>came under</em> pressure from shareholders to divest.'] },
+    { term:'come up against', pos:'phrasal verb', meaning:'To encounter a problem or opponent.', examples:['The reform programme <em>came up against</em> fierce resistance.','We <em>came up against</em> significant technical obstacles.'] },
+    { term:'come up with', pos:'phrasal verb', meaning:'To produce an idea, plan, or solution.', examples:['She <em>came up with</em> an ingenious solution.','No one could <em>come up with</em> a satisfactory answer.'] },
+    { term:'count on', pos:'phrasal verb', meaning:'To rely on someone or something.', examples:['You can always <em>count on</em> her in a crisis.','They were <em>counting on</em> external funding that never materialised.'] },
+    { term:'count for', pos:'phrasal verb', meaning:'To have a certain degree of importance or value.', examples:['Experience <em>counts for</em> a great deal in this industry.','Without results, loyalty <em>counts for</em> nothing.'] },
+    { term:'cut across', pos:'phrasal verb', meaning:'To affect or concern several different groups; to transcend boundaries.', examples:['The issue <em>cuts across</em> party lines.','Poverty <em>cuts across</em> racial and cultural divisions.'] },
+    { term:'cut back on', pos:'phrasal verb', meaning:'To reduce expenditure or activity.', examples:['The company has had to <em>cut back on</em> research spending.','Governments across Europe are <em>cutting back on</em> public services.'] },
+    { term:'cut corners', pos:'phrasal verb', meaning:'To do something to a lower standard to save time or money.', examples:['Several contractors had clearly <em>cut corners</em> during the construction phase.'] },
+    // ── D ──
+    { term:'deal with', pos:'phrasal verb', meaning:'To handle, address, or manage a problem or situation.', examples:['The new team was tasked with <em>dealing with</em> the backlog.','The legislation is designed to <em>deal with</em> financial misconduct.'] },
+    { term:'die down', pos:'phrasal verb', meaning:'To become less intense; to subside.', examples:['The controversy eventually <em>died down</em>.','It took several weeks for the furore to <em>die down</em>.'] },
+    { term:'dig in', pos:'phrasal verb', meaning:'To refuse to change one\'s position; to become more firmly entrenched.', examples:['Both sides have <em>dug in</em> and show no sign of compromise.','The government has <em>dug in</em> on the issue of welfare cuts.'] },
+    { term:'draw on', pos:'phrasal verb', meaning:'To use knowledge, experience, or resources as a source.', examples:['Her speech <em>drew on</em> decades of frontline experience.','The report <em>draws on</em> data from twelve different countries.'] },
+    { term:'draw up', pos:'phrasal verb', meaning:'To prepare a formal document, plan, or list.', examples:['The lawyers <em>drew up</em> a comprehensive contract.','A new set of guidelines was <em>drawn up</em> following the inquiry.'] },
+    { term:'drum up', pos:'phrasal verb', meaning:'To try hard to generate support, business, or enthusiasm.', examples:['The campaign was designed to <em>drum up</em> support for the referendum.','He spent weeks <em>drumming up</em> investment.'] },
+    // ── E ──
+    { term:'ease off / up', pos:'phrasal verb', meaning:'To become less intense, severe, or demanding.', examples:['The pressure from creditors eventually <em>eased off</em>.','Once the initial crisis passed, tensions began to <em>ease up</em>.'] },
+    { term:'embark on', pos:'phrasal verb', meaning:'To begin a new and important project or course of action.', examples:['The government has <em>embarked on</em> an ambitious programme of reform.','She <em>embarked on</em> a career in international law.'] },
+    { term:'emerge from', pos:'phrasal verb', meaning:'To come out of a difficult period; to become apparent.', examples:['The company is slowly <em>emerging from</em> its worst crisis in decades.','A clear pattern began to <em>emerge from</em> the data.'] },
+    { term:'end up', pos:'phrasal verb', meaning:'To eventually be in a situation or place, often unexpectedly.', examples:['The case <em>ended up</em> in the Supreme Court.','Without proper oversight, mistakes <em>end up</em> being concealed.'] },
+    // ── F ──
+    { term:'face up to', pos:'phrasal verb', meaning:'To accept and deal honestly with a difficult situation.', examples:['The government must <em>face up to</em> the scale of the problem.','She had to <em>face up to</em> the consequences of her decisions.'] },
+    { term:'fall apart', pos:'phrasal verb', meaning:'To disintegrate; to cease functioning.', examples:['The coalition <em>fell apart</em> over the budget.','His carefully constructed argument <em>fell apart</em> under cross-examination.'] },
+    { term:'fall back on', pos:'phrasal verb', meaning:'To use as a last resort or support when nothing else is available.', examples:['When the system failed, staff had to <em>fall back on</em> manual processes.','She had few savings to <em>fall back on</em>.'] },
+    { term:'fall foul of', pos:'phrasal verb', meaning:'To come into conflict with a rule, law, or authority.', examples:['The company <em>fell foul of</em> the competition regulator.','He <em>fell foul of</em> the disciplinary committee for the second time.'] },
+    { term:'fall through', pos:'phrasal verb', meaning:'(Of a plan or deal) to fail to happen or be completed.', examples:['The merger <em>fell through</em> at the last moment.','Negotiations <em>fell through</em> after both parties refused to compromise.'] },
+    { term:'fend off', pos:'phrasal verb', meaning:'To defend against an attack, criticism, or unwanted attention.', examples:['The minister spent the whole press conference <em>fending off</em> questions about the scandal.','The company successfully <em>fended off</em> the hostile takeover bid.'] },
+    { term:'figure out', pos:'phrasal verb', meaning:'To discover or work out through reasoning.', examples:['Investigators are still trying to <em>figure out</em> what happened.','Can you <em>figure out</em> the pattern in the data?'] },
+    { term:'filter through', pos:'phrasal verb', meaning:'(Of information or effects) to gradually become known or apparent.', examples:['News of the decision <em>filtered through</em> to staff during the afternoon.','The benefits are expected to <em>filter through</em> to consumers over time.'] },
+    { term:'follow through', pos:'phrasal verb', meaning:'To complete an action fully; to do what was promised.', examples:['Critics accused the government of failing to <em>follow through</em> on its promises.','It is not enough to make pledges — you must <em>follow through</em>.'] },
+    { term:'follow up on', pos:'phrasal verb', meaning:'To pursue further or investigate after an initial step.', examples:['Please <em>follow up on</em> the complaint received last week.','The committee agreed to <em>follow up on</em> the recommendations.'] },
+    // ── G ──
+    { term:'get around', pos:'phrasal verb', meaning:'(1) To find a way to avoid a rule or problem. (2) (Of news) to spread.', examples:['Clever accountants know how to <em>get around</em> tax regulations.','Word quickly <em>got around</em> about the redundancies.'] },
+    { term:'give rise to', pos:'phrasal verb', meaning:'To cause or produce something (often abstract).', examples:['The new policy <em>gave rise to</em> widespread concern.','Urbanisation <em>gives rise to</em> a range of social challenges.'] },
+    { term:'give way to', pos:'phrasal verb', meaning:'(1) To be replaced by something. (2) To yield to pressure or emotion.', examples:['Initial scepticism <em>gave way to</em> grudging acceptance.','The minister <em>gave way</em> under sustained parliamentary pressure.'] },
+    { term:'gloss over', pos:'phrasal verb', meaning:'To deal with quickly so as to conceal or minimise.', examples:['The report <em>glossed over</em> the most damaging findings.','She <em>glossed over</em> the inconsistencies in her account.'] },
+    { term:'grind to a halt', pos:'phrasal verb', meaning:'To stop gradually but completely.', examples:['Production <em>ground to a halt</em> when the factory was hit by a strike.','Negotiations <em>ground to a halt</em> after the breakdown in trust.'] },
+    // ── H ──
+    { term:'hammer out', pos:'phrasal verb', meaning:'To reach an agreement through lengthy and difficult discussion.', examples:['The two sides finally <em>hammered out</em> a deal after three days.','A compromise was eventually <em>hammered out</em> at the summit.'] },
+    { term:'hand down', pos:'phrasal verb', meaning:'(1) To pass on. (2) (Of a court) to deliver a verdict or sentence.', examples:['The practice has been <em>handed down</em> through generations.','The judge <em>handed down</em> a custodial sentence.'] },
+    { term:'hang on', pos:'phrasal verb', meaning:'(1) To wait. (2) To depend on. (3) To hold tightly.', examples:['Everything <em>hangs on</em> the result of tomorrow\'s vote.','<em>Hang on</em> — I\'d like to clarify something.'] },
+    { term:'hold back', pos:'phrasal verb', meaning:'(1) To restrain or prevent. (2) To withhold information.', examples:['There is nothing to <em>hold back</em> further investment.','She felt the chairman was <em>holding something back</em>.'] },
+    { term:'hold off', pos:'phrasal verb', meaning:'(1) To delay or postpone. (2) To resist an attack.', examples:['The decision has been <em>held off</em> pending further consultation.','The company managed to <em>hold off</em> its rivals for another quarter.'] },
+    { term:'hold out', pos:'phrasal verb', meaning:'(1) To resist giving in. (2) To offer or extend.', examples:['The union <em>held out</em> for a better deal.','The peace talks <em>hold out</em> some prospect of resolution.'] },
+    { term:'hold sway', pos:'phrasal verb', meaning:'To have great power or influence.', examples:['Ideology continues to <em>hold sway</em> over economic policy.','In those years, military interests <em>held sway</em> over the region.'] },
+    { term:'hush up', pos:'phrasal verb', meaning:'To suppress information; to prevent a scandal becoming public.', examples:['The affair was <em>hushed up</em> by the party leadership.','They tried to <em>hush up</em> the safety violations.'] },
+    // ── I ──
+    { term:'iron out', pos:'phrasal verb', meaning:'To resolve or eliminate problems or differences.', examples:['We need to <em>iron out</em> a few contractual issues.','The two sides met to <em>iron out</em> their differences.'] },
+    // ── K ──
+    { term:'keep up with', pos:'phrasal verb', meaning:'To maintain pace with; to stay informed about.', examples:['It is hard to <em>keep up with</em> the pace of regulatory change.','She struggled to <em>keep up with</em> the workload.'] },
+    { term:'knock back', pos:'phrasal verb', meaning:'(1) To reject. (2) To drink quickly. (3) To cost (informal).', examples:['The planning application was <em>knocked back</em> by the council.','The proposal was <em>knocked back</em> for the third time.'] },
+    // ── L ──
+    { term:'lay bare', pos:'phrasal verb', meaning:'To reveal or expose something completely.', examples:['The inquiry <em>laid bare</em> the extent of the corruption.','The audit <em>laid bare</em> the company\'s financial vulnerabilities.'] },
+    { term:'lay down', pos:'phrasal verb', meaning:'(1) To establish rules or conditions. (2) To surrender weapons.', examples:['The treaty <em>lays down</em> strict conditions for compliance.','Regulations <em>laid down</em> by the regulator must be followed.'] },
+    { term:'lay off', pos:'phrasal verb', meaning:'To make workers redundant.', examples:['The company had to <em>lay off</em> 400 employees.','Over 1,000 workers were <em>laid off</em> as part of the restructuring.'], note:'Formal equivalent: make redundant.' },
+    { term:'level off / out', pos:'phrasal verb', meaning:'To stop increasing or decreasing; to stabilise.', examples:['Inflation appears to have <em>levelled off</em> at around 3%.','After rapid growth, sales have <em>levelled out</em>.'] },
+    { term:'lock in', pos:'phrasal verb', meaning:'To commit to a fixed price, rate, or arrangement.', examples:['Investors are keen to <em>lock in</em> current interest rates.','The contract <em>locks in</em> the supplier for three years.'] },
+    { term:'look ahead', pos:'phrasal verb', meaning:'To consider what might happen in the future; to plan forward.', examples:['<em>Looking ahead</em>, the board must address the question of succession.','<em>Looking ahead</em> to next year, the outlook remains uncertain.'] },
+    { term:'look into', pos:'phrasal verb', meaning:'To investigate or research.', examples:['The committee agreed to <em>look into</em> the matter.','Police are <em>looking into</em> the possibility of fraud.'] },
+    // ── M ──
+    { term:'make for', pos:'phrasal verb', meaning:'To contribute to; to result in.', examples:['Lack of transparency <em>makes for</em> poor decision-making.','This <em>makes for</em> an uncomfortable read.'] },
+    { term:'make of', pos:'phrasal verb', meaning:'To understand or interpret something.', examples:['It is difficult to know what to <em>make of</em> the latest figures.','What do you <em>make of</em> his sudden resignation?'] },
+    { term:'make out', pos:'phrasal verb', meaning:'(1) To claim or suggest. (2) To discern with difficulty.', examples:['The press were trying to <em>make out</em> that the minister had lied.','From the documents, one can barely <em>make out</em> the original figures.'] },
+    { term:'make up for', pos:'phrasal verb', meaning:'To compensate for something lost or missed.', examples:['The strong Q4 performance <em>made up for</em> the earlier losses.','She worked extra hours to <em>make up for</em> the disruption.'] },
+    { term:'mark out', pos:'phrasal verb', meaning:'To distinguish or identify as having special qualities.', examples:['Her analytical skills <em>mark her out</em> as an exceptional candidate.','What <em>marks out</em> this approach is its emphasis on prevention.'] },
+    { term:'measure up', pos:'phrasal verb', meaning:'To be good enough; to reach the required standard.', examples:['The new system simply does not <em>measure up</em>.','He was afraid he would not <em>measure up</em> to his predecessor.'] },
+    { term:'muddy the waters', pos:'phrasal verb', meaning:'To make a situation more confused or complicated.', examples:['The minister\'s statement only served to <em>muddy the waters</em> further.','Introducing new variables at this stage will only <em>muddy the waters</em>.'] },
+    // ── N ──
+    { term:'nail down', pos:'phrasal verb', meaning:'To establish or finalise something precisely.', examples:['We need to <em>nail down</em> the exact timeline.','They struggled to <em>nail down</em> the precise cause of the failure.'] },
+    { term:'narrow down', pos:'phrasal verb', meaning:'To reduce the number of options or possibilities.', examples:['The list of suspects has been <em>narrowed down</em> to three.','We need to <em>narrow down</em> the scope of the inquiry.'] },
+    // ── O ──
+    { term:'open up', pos:'phrasal verb', meaning:'(1) To create new opportunities. (2) To begin to speak freely. (3) To unlock or make accessible.', examples:['The treaty <em>opens up</em> new markets for exporters.','Under gentle questioning, the witness began to <em>open up</em>.'] },
+    { term:'opt out of', pos:'phrasal verb', meaning:'To choose not to participate in something.', examples:['Several member states chose to <em>opt out of</em> the directive.','Employees can <em>opt out of</em> the pension scheme.'] },
+    { term:'overhaul', pos:'phrasal verb / noun', meaning:'To examine thoroughly and improve or repair; a major review.', examples:['The entire regulatory framework needs to be <em>overhauled</em>.','The company announced a complete <em>overhaul</em> of its operations.'] },
+    // ── P ──
+    { term:'paper over', pos:'phrasal verb', meaning:'To conceal a problem without solving it.', examples:['The agreement merely <em>papered over</em> the fundamental divisions.','A short-term fix cannot <em>paper over</em> structural failures.'] },
+    { term:'pay off', pos:'phrasal verb', meaning:'(1) To yield results. (2) To repay a debt. (3) To bribe.', examples:['Years of investment are finally <em>paying off</em>.','The loan was <em>paid off</em> within five years.'] },
+    { term:'phase in / out', pos:'phrasal verb pair', meaning:'"Phase in" = introduce gradually. "Phase out" = withdraw gradually.', examples:['New standards will be <em>phased in</em> over a five-year period.','Coal subsidies are being <em>phased out</em> across the EU.'] },
+    { term:'pick up on', pos:'phrasal verb', meaning:'To notice or become aware of something subtle.', examples:['She was quick to <em>pick up on</em> the tension in the room.','The press <em>picked up on</em> the contradiction in his statement.'] },
+    { term:'pin down', pos:'phrasal verb', meaning:'(1) To force someone to be specific. (2) To identify precisely.', examples:['It is difficult to <em>pin down</em> exactly when the problem started.','Journalists tried to <em>pin him down</em> on his position.'] },
+    { term:'play down', pos:'phrasal verb', meaning:'To make something seem less important than it is.', examples:['The spokesperson tried to <em>play down</em> the significance of the leak.','Officials initially <em>played down</em> the health risks.'], note:'Opposite: play up.' },
+    { term:'play out', pos:'phrasal verb', meaning:'To happen or develop over time; to be enacted.', examples:['The crisis <em>played out</em> over several months.','A similar scenario <em>played out</em> in the 1990s.'] },
+    { term:'plug the gap', pos:'phrasal verb', meaning:'To fill a shortage or deficiency.', examples:['Emergency funding was allocated to <em>plug the gap</em> in the budget.','The recruitment drive is intended to <em>plug the gap</em> in key skills.'] },
+    { term:'point to', pos:'phrasal verb', meaning:'To indicate or suggest as evidence.', examples:['The data <em>point to</em> a clear causal relationship.','All the evidence <em>points to</em> systemic failure.'] },
+    { term:'press ahead with', pos:'phrasal verb', meaning:'To continue with determination despite obstacles.', examples:['The government intends to <em>press ahead with</em> the reforms.','She <em>pressed ahead with</em> the project against considerable opposition.'] },
+    { term:'prop up', pos:'phrasal verb', meaning:'To support something that would otherwise fail.', examples:['The state is accused of <em>propping up</em> unviable industries.','Artificially low interest rates have been <em>propping up</em> the housing market.'] },
+    { term:'pull off', pos:'phrasal verb', meaning:'To succeed in doing something difficult.', examples:['Against all expectations, they <em>pulled off</em> a remarkable victory.','Can she really <em>pull off</em> such an ambitious restructure?'] },
+    { term:'pull out of', pos:'phrasal verb', meaning:'To withdraw from an agreement, project, or competition.', examples:['The US threatened to <em>pull out of</em> the treaty.','The company decided to <em>pull out of</em> the joint venture.'] },
+    { term:'push back against', pos:'phrasal verb', meaning:'To resist or challenge firmly.', examples:['Scientists have been <em>pushing back against</em> the misleading claims.','Several committee members <em>pushed back against</em> the proposals.'] },
+    { term:'put across', pos:'phrasal verb', meaning:'To communicate an idea or argument clearly and effectively.', examples:['She struggled to <em>put across</em> the complexity of the issue in a short speech.','The report <em>puts across</em> its argument with admirable clarity.'] },
+    { term:'put forward', pos:'phrasal verb', meaning:'To present or propose an idea, argument, or candidate.', examples:['Several candidates were <em>put forward</em> for the position.','The motion was <em>put forward</em> by the finance committee.'] },
+    { term:'put off', pos:'phrasal verb', meaning:'(1) To postpone. (2) To discourage or deter.', examples:['The board <em>put off</em> the vote until next quarter.','His aggressive manner <em>puts people off</em>.'] },
+    { term:'put out', pos:'phrasal verb', meaning:'(1) To issue or release. (2) To extinguish. (3) To inconvenience.', examples:['The company <em>put out</em> a statement denying the allegations.','The fire was <em>put out</em> within an hour.'] },
+    // ── R ──
+    { term:'ramp up', pos:'phrasal verb', meaning:'To increase significantly and rapidly.', examples:['Production needs to be <em>ramped up</em> to meet demand.','The company is <em>ramping up</em> its investment in AI.'] },
+    { term:'ride out', pos:'phrasal verb', meaning:'To endure a difficult period until it passes.', examples:['The company managed to <em>ride out</em> the recession.','She was determined to <em>ride out</em> the controversy and stay in post.'] },
+    { term:'ring-fence', pos:'phrasal verb', meaning:'To protect specific funds or activities from cuts or interference.', examples:['The education budget has been <em>ring-fenced</em> despite wider cuts.','They refused to <em>ring-fence</em> any of the welfare budget.'] },
+    { term:'roll back', pos:'phrasal verb', meaning:'To reduce or reverse something previously established.', examples:['There are calls to <em>roll back</em> the regulations introduced after the crisis.','Progress in equality could be <em>rolled back</em> by the new legislation.'] },
+    { term:'roll out', pos:'phrasal verb', meaning:'To introduce or deploy something on a large scale.', examples:['The vaccine was <em>rolled out</em> across the country within months.','The company is <em>rolling out</em> a new digital platform.'] },
+    { term:'rule out', pos:'phrasal verb', meaning:'To eliminate a possibility; to decide something is not an option.', examples:['The minister refused to <em>rule out</em> further cuts.','No cause has yet been <em>ruled out</em>.'] },
+    // ── S ──
+    { term:'scale back / down', pos:'phrasal verb', meaning:'To reduce the size, scope, or ambition of something.', examples:['Plans for the project have been <em>scaled back</em> due to budget constraints.','The military has <em>scaled down</em> its presence in the region.'] },
+    { term:'set against', pos:'phrasal verb', meaning:'(1) To weigh one thing against another. (2) To cause opposition to.', examples:['The benefits must be <em>set against</em> the potential risks.','The policy <em>set</em> traditional communities <em>against</em> the reformers.'] },
+    { term:'set aside', pos:'phrasal verb', meaning:'(1) To ignore or disregard. (2) To reserve for a specific purpose.', examples:['<em>Setting aside</em> political considerations, the proposal has merit.','Funds have been <em>set aside</em> for emergency repairs.'] },
+    { term:'set in', pos:'phrasal verb', meaning:'(Of something unpleasant) to begin and establish itself.', examples:['Before panic could <em>set in</em>, the CEO addressed the staff.','Once complacency <em>sets in</em>, standards begin to fall.'] },
+    { term:'set off', pos:'phrasal verb', meaning:'To trigger or cause a reaction or chain of events.', examples:['The announcement <em>set off</em> a wave of protests.','A single spark <em>set off</em> a chain reaction.'] },
+    { term:'set out', pos:'phrasal verb', meaning:'(1) To explain or present clearly. (2) To begin a journey with a goal.', examples:['The report <em>sets out</em> a clear framework for action.','She <em>set out</em> to reform the entire procurement system.'] },
+    { term:'set up', pos:'phrasal verb', meaning:'(1) To establish. (2) To arrange or prepare. (3) To frame someone (informal).', examples:['A new regulatory body was <em>set up</em> to oversee compliance.','He claimed he had been <em>set up</em> by his colleagues.'] },
+    { term:'sign off on', pos:'phrasal verb', meaning:'To give formal approval to.', examples:['The board <em>signed off on</em> the new strategy at the last meeting.','Who <em>signed off on</em> this expenditure?'] },
+    { term:'single out', pos:'phrasal verb', meaning:'To choose one from a group for special attention.', examples:['The report <em>singled out</em> three departments for particular criticism.','She was <em>singled out</em> for praise by the committee.'] },
+    { term:'slow down', pos:'phrasal verb', meaning:'To reduce speed or rate of activity.', examples:['Growth has begun to <em>slow down</em>.','The pace of reform has <em>slowed down</em> significantly.'] },
+    { term:'smooth over', pos:'phrasal verb', meaning:'To resolve or reduce tension in a difficult situation.', examples:['The mediator tried to <em>smooth over</em> the differences between the parties.','A public apology helped to <em>smooth over</em> the controversy.'] },
+    { term:'sort out', pos:'phrasal verb', meaning:'To resolve or organise.', examples:['The technical issues have now been <em>sorted out</em>.','She was brought in to <em>sort out</em> the finances.'] },
+    { term:'speak out', pos:'phrasal verb', meaning:'To express one\'s views openly, especially when there is risk involved.', examples:['Very few employees were willing to <em>speak out</em> against management.','She <em>spoke out</em> publicly about the conditions in the factory.'] },
+    { term:'square with', pos:'phrasal verb', meaning:'To be consistent or compatible with.', examples:['His version of events doesn\'t <em>square with</em> the evidence.','How does this policy <em>square with</em> your stated values?'] },
+    { term:'stand down', pos:'phrasal verb', meaning:'To resign from a position; to withdraw from a confrontation.', examples:['Under mounting pressure, the chairman agreed to <em>stand down</em>.','Both sides were asked to <em>stand down</em> their forces.'] },
+    { term:'stand for', pos:'phrasal verb', meaning:'(1) To represent or mean. (2) To tolerate. (3) To be a candidate for.', examples:['What does the abbreviation <em>stand for</em>?','This is not the kind of behaviour we will <em>stand for</em>.','She intends to <em>stand for</em> election next year.'] },
+    { term:'stand up to', pos:'phrasal verb', meaning:'To resist or challenge firmly.', examples:['The findings did not <em>stand up to</em> rigorous scrutiny.','He was the only one willing to <em>stand up to</em> the committee chair.'] },
+    { term:'stem from', pos:'phrasal verb', meaning:'To originate from; to be caused by.', examples:['The dispute <em>stems from</em> a fundamental misunderstanding.','Many of the problems <em>stem from</em> decades of underinvestment.'] },
+    { term:'stir up', pos:'phrasal verb', meaning:'To provoke or cause (controversy, trouble, emotion).', examples:['The announcement <em>stirred up</em> considerable controversy.','His remarks <em>stirred up</em> long-standing grievances.'] },
+    // ── T ──
+    { term:'take account of', pos:'phrasal verb', meaning:'To consider or include something when making a decision.', examples:['The model fails to <em>take account of</em> seasonal variations.','All factors must be <em>taken into account</em> before proceeding.'] },
+    { term:'take hold', pos:'phrasal verb', meaning:'(Of an idea, situation, or condition) to become established.', examples:['Once austerity <em>took hold</em>, recovery proved extremely slow.','The infection had already <em>taken hold</em> by the time treatment began.'] },
+    { term:'take on', pos:'phrasal verb', meaning:'(1) To accept responsibility or work. (2) To employ. (3) To confront.', examples:['The firm is <em>taking on</em> new clients.','She <em>took on</em> the challenge of rebuilding the organisation from scratch.','It takes courage to <em>take on</em> a more powerful opponent.'] },
+    { term:'take stock of', pos:'phrasal verb', meaning:'To carefully assess a situation before deciding what to do.', examples:['It is time to <em>take stock of</em> what has been achieved.','After the crisis, the company <em>took stock of</em> its position.'] },
+    { term:'talk round', pos:'phrasal verb (BrE)', meaning:'To persuade someone to change their opinion.', examples:['It took hours to <em>talk her round</em>.','He was initially opposed, but we eventually <em>talked him round</em>.'] },
+    { term:'taper off', pos:'phrasal verb', meaning:'To gradually decrease in size, extent, or frequency.', examples:['Growth is expected to <em>taper off</em> toward the end of the year.','Support for the policy has been <em>tapering off</em>.'] },
+    { term:'throw into doubt', pos:'phrasal verb', meaning:'To make something seem uncertain or unreliable.', examples:['The new findings <em>throw the entire conclusion into doubt</em>.','Recent events <em>throw into doubt</em> the viability of the project.'] },
+    { term:'tide over', pos:'phrasal verb', meaning:'To help someone through a difficult period with temporary support.', examples:['An emergency loan <em>tided the company over</em> until the contract arrived.','The grant was intended to <em>tide us over</em> until permanent funding was secured.'] },
+    { term:'trickle down', pos:'phrasal verb', meaning:'To gradually pass from higher to lower levels.', examples:['Economists debate whether prosperity actually <em>trickles down</em> to the poorest.','Decisions made at the top rarely <em>trickle down</em> quickly to frontline staff.'] },
+    { term:'trigger off', pos:'phrasal verb', meaning:'To set off a reaction or process (often automatic or unintended).', examples:['The report <em>triggered off</em> a chain of unexpected regulatory reviews.'] },
+    // ── U ──
+    { term:'undermine', pos:'phrasal verb', meaning:'To weaken or damage gradually and often covertly.', examples:['The leaks served to <em>undermine</em> public trust in the institution.','Constant internal criticism was <em>undermining</em> the team\'s morale.'] },
+    { term:'unpick', pos:'phrasal verb', meaning:'To examine in detail; to undo what has been done.', examples:['The legal team spent weeks trying to <em>unpick</em> the contractual obligations.','It will take years to <em>unpick</em> the damage done by those policies.'] },
+    // ── V ──
+    { term:'vouch for', pos:'phrasal verb', meaning:'To confirm the reliability, truth, or good character of.', examples:['I can personally <em>vouch for</em> the accuracy of the data.','He was willing to <em>vouch for</em> her professionalism.'] },
+    // ── W ──
+    { term:'water down', pos:'phrasal verb', meaning:'To weaken or reduce the strength of a proposal or rule.', examples:['The legislation was significantly <em>watered down</em> before passing.','The original proposal had been <em>watered down</em> beyond recognition.'] },
+    { term:'wear down', pos:'phrasal verb', meaning:'To gradually weaken through persistent pressure or attrition.', examples:['The prolonged negotiations eventually <em>wore down</em> the opposition.','Years of legal battle had <em>worn him down</em>.'] },
+    { term:'wear off', pos:'phrasal verb', meaning:'(Of a feeling or effect) to gradually diminish and disappear.', examples:['The initial enthusiasm quickly <em>wore off</em>.','Once the anaesthetic <em>wore off</em>, the pain returned.'] },
+    { term:'weigh up', pos:'phrasal verb', meaning:'To consider the merits and drawbacks of something carefully.', examples:['The committee must <em>weigh up</em> the costs and benefits carefully.','She took a long time to <em>weigh up</em> the options before deciding.'] },
+    { term:'whittle down', pos:'phrasal verb', meaning:'To reduce gradually in size or number.', examples:['The list of candidates was <em>whittled down</em> to three.','The opposition majority was gradually <em>whittled down</em> by defections.'] },
+    { term:'wind down', pos:'phrasal verb', meaning:'To gradually bring an activity to an end; to relax.', examples:['Operations at the plant are being <em>wound down</em>.','The programme will be <em>wound down</em> over the next two years.'] },
+    { term:'write off', pos:'phrasal verb', meaning:'(1) To dismiss as unimportant or unviable. (2) To cancel a debt. (3) To completely destroy.', examples:['Do not <em>write off</em> the possibility of a recovery.','The bank agreed to <em>write off</em> a portion of the debt.'] },
+  ]
+},
+
+colloc: {
+  title: 'Collocations',
+  intro: 'Collocations are word combinations that native speakers use naturally and instinctively. Using the wrong collocate — even if grammatically valid — marks a non-native speaker immediately.',
+  entries: [
+    { term:'cast doubt on', pos:'verb + noun', meaning:'To make something seem less certain or reliable.', examples:['New evidence <em>cast serious doubt on</em> the official account.'], note:'Also: cast a shadow over (reputation), cast aspersions on (character).' },
+    { term:'raise / pose questions about', pos:'verb + noun', meaning:'To cause people to question something.', examples:['The discrepancy <em>raises serious questions about</em> the data.','The decision <em>poses fundamental questions about</em> accountability.'], note:'"Raise" = bring to attention. "Pose" = present as a challenge.' },
+    { term:'impose a burden on', pos:'verb + noun', meaning:'To place a significant hardship or obligation on.', examples:['The new regulations will <em>impose a considerable burden on</em> small businesses.'] },
+    { term:'leave an impression on', pos:'verb + noun', meaning:'To have a lasting impact.', examples:['His speech <em>left a lasting impression on</em> the audience.'], note:'"Leave" (not "make") an impression on a person.' },
+    { term:'far-reaching implications', pos:'adj + noun', meaning:'Consequences affecting many areas over a long time.', examples:['The ruling has <em>far-reaching implications</em> for privacy law.'] },
+    { term:'make a compelling case', pos:'verb + adj + noun', meaning:'To present a convincing argument.', examples:['She <em>made a compelling case</em> for increasing the research budget.'] },
+    { term:'strike a balance', pos:'verb + noun', meaning:'To find a satisfactory middle point between competing demands.', examples:['The policy attempts to <em>strike a balance between</em> security and liberty.'] },
+    { term:'sweeping + noun', pos:'adj collocation', meaning:'"Sweeping" + conclusions / changes / reforms / generalisations / powers.', examples:['The report drew <em>sweeping conclusions</em> from limited data.','The government promised <em>sweeping reforms</em>.'] },
+    { term:'shed light on', pos:'verb + noun', meaning:'To clarify; to provide new information about something.', examples:['The inquiry <em>shed new light on</em> the causes of the disaster.'] },
+    { term:'lay the blame on', pos:'verb + noun', meaning:'To hold someone responsible.', examples:['The report <em>laid the blame squarely on</em> the regulator.'] },
+    { term:'utterly / fundamentally / wholly + adjective', pos:'adverb collocations', meaning:'Strong C2-level adverbs with specific adjectives.', examples:['The claims are <em>utterly unfounded</em>.','The proposal is <em>fundamentally flawed</em>.','The verdict was <em>wholly disproportionate</em>.','The system is <em>inherently unstable</em>.'] },
+    { term:'take something out of context', pos:'verb phrase', meaning:'To quote misleadingly by omitting context.', examples:['His remarks were <em>taken out of context</em> by the press.'] },
+    { term:'give weight to', pos:'verb + noun', meaning:'To lend importance or credibility to something.', examples:['The findings <em>give considerable weight to</em> the theory.','Her endorsement <em>gave weight to</em> the campaign.'] },
+    { term:'come under scrutiny', pos:'verb phrase', meaning:'To be carefully and critically examined.', examples:['The contract has <em>come under intense scrutiny</em>.'] },
+    { term:'spark a debate / controversy', pos:'verb + noun', meaning:'To cause a debate to begin.', examples:['The proposals <em>sparked a fierce debate</em> in parliament.'] },
+    { term:'mount a challenge / campaign / defence', pos:'verb + noun', meaning:'"Mount" collocates with: challenge, campaign, defence, offensive, opposition.', examples:['The opposition is <em>mounting a serious challenge</em> to the government.','She <em>mounted a robust defence</em> of her actions.'] },
+    { term:'exert pressure / influence / control', pos:'verb + noun', meaning:'"Exert" with abstract forces applied deliberately.', examples:['The lobbyists <em>exerted considerable pressure</em> on legislators.','The media can <em>exert enormous influence</em> over public opinion.'] },
+    { term:'bear the brunt of', pos:'verb + noun', meaning:'To suffer the worst part of something unpleasant.', examples:['Frontline workers <em>bore the brunt of</em> the criticism.','Low-income households <em>bear the brunt of</em> austerity measures.'] },
+    { term:'draw a distinction between', pos:'verb + noun', meaning:'To identify and emphasise the difference between two things.', examples:['We must <em>draw a clear distinction between</em> correlation and causation.'] },
+    { term:'run counter to', pos:'verb phrase', meaning:'To be in direct opposition to; to contradict.', examples:['The findings <em>run counter to</em> prevailing assumptions.','This decision <em>runs counter to</em> everything we have advocated.'] },
+    { term:'stem from', pos:'verb phrase', meaning:'To originate from; to be caused by.', examples:['The dispute <em>stems from</em> a fundamental misunderstanding.'] },
+    { term:'hold sway over', pos:'verb + noun', meaning:'To have great power or influence over.', examples:['Ideology continues to <em>hold sway over</em> economic policy.'] },
+    { term:'glaring inconsistency / omission / contradiction', pos:'adj + noun', meaning:'"Glaring" collocates with: inconsistency, omission, contradiction, flaw, error, oversight.', examples:['There is a <em>glaring inconsistency</em> in his account.','The report contains a number of <em>glaring omissions</em>.'] },
+    { term:'stark contrast / reminder / warning / reality', pos:'adj + noun', meaning:'"Stark" collocates with: contrast, reminder, warning, reality, choice, difference.', examples:['The figures are a <em>stark reminder</em> of the scale of the problem.'] },
+    { term:'deep-seated / ingrained + noun', pos:'adj collocations', meaning:'"Deep-seated / ingrained" with: prejudice, inequality, resistance, distrust, problem.', examples:['<em>Deep-seated</em> inequality cannot be resolved by short-term measures.','<em>Ingrained</em> attitudes are notoriously difficult to change.'] },
+    { term:'make inroads into', pos:'verb + noun', meaning:'To make significant progress into something difficult or competitive.', examples:['The new party has been <em>making inroads into</em> traditionally safe seats.','The drug is <em>making inroads into</em> treatment-resistant strains.'] },
+    { term:'reach a consensus', pos:'verb + noun', meaning:'To arrive at a general agreement.', examples:['The panel was unable to <em>reach a consensus</em> on the cause.','A <em>consensus</em> was eventually <em>reached</em> after weeks of negotiation.'] },
+    { term:'take a toll on', pos:'verb phrase', meaning:'To have a seriously damaging effect on.', examples:['The sustained pressure has <em>taken a heavy toll on</em> the team.','Years of underfunding have <em>taken their toll on</em> the infrastructure.'] },
+    { term:'draw on', pos:'verb phrase', meaning:'To use a resource, experience, or body of knowledge.', examples:['The report <em>draws on</em> data from twelve countries.','Her speech <em>drew on</em> decades of frontline experience.'] },
+    { term:'call into question', pos:'verb phrase', meaning:'To cause serious doubt about something.', examples:['The findings <em>call into question</em> the entire basis of the policy.','His impartiality has been <em>called into question</em>.'] },
+    { term:'strike at the heart of', pos:'verb phrase', meaning:'To attack or challenge the most essential part of something.', examples:['This scandal <em>strikes at the heart of</em> the institution\'s credibility.'] },
+    { term:'seismic / tectonic shift', pos:'adj + noun', meaning:'A very large and fundamental change.', examples:['Social media has caused a <em>seismic shift</em> in political communication.','The vote represented a <em>tectonic shift</em> in the political landscape.'] },
+    { term:'erode confidence / trust / support', pos:'verb + noun', meaning:'"Erode" collocates with things that weaken gradually.', examples:['Each scandal <em>eroded public confidence</em> further.','Years of broken promises have <em>eroded trust</em> in the institution.'] },
+    { term:'reinforce / perpetuate stereotypes', pos:'verb + noun', meaning:'To strengthen or continue negative generalisations.', examples:['The media coverage risks <em>perpetuating harmful stereotypes</em>.','The policy inadvertently <em>reinforces existing inequalities</em>.'] },
+    { term:'on an unprecedented scale', pos:'prep phrase + noun', meaning:'Of a size or extent never seen before.', examples:['The operation was conducted <em>on an unprecedented scale</em>.'] },
+    { term:'trigger a crisis / response / debate', pos:'verb + noun', meaning:'"Trigger" collocates with sudden beginnings.', examples:['The announcement <em>triggered a constitutional crisis</em>.','The incident <em>triggered an immediate response</em> from the authorities.'] },
+    { term:'tackle / address the root cause', pos:'verb + noun', meaning:'To deal with the underlying, fundamental source of a problem.', examples:['We must <em>address the root causes</em> of radicalisation, not just its symptoms.'] },
+    { term:'bridge the gap / divide', pos:'verb + noun', meaning:'To reduce or close a difference between groups or situations.', examples:['The policy aims to <em>bridge the gap</em> between rich and poor.','Technology could help <em>bridge the digital divide</em>.'] },
+    { term:'defy expectations / logic / convention', pos:'verb + noun', meaning:'"Defy" collocates with things that should apply but don\'t.', examples:['The results <em>defy conventional economic logic</em>.','Her recovery has <em>defied all expectations</em>.'] },
+  ]
+},
+
+idioms: {
+  title: 'Idioms',
+  intro: 'Idioms are fixed expressions whose meaning cannot be derived from individual words. At C1/C2 level they appear in journalism, formal debate, political speech, and professional contexts.',
+  entries: [
+    { term:'sit on the fence', pos:'idiom', meaning:'To avoid committing to a position.', examples:['You cannot keep <em>sitting on the fence</em> — the vote is tomorrow.'] },
+    { term:'open a can of worms', pos:'idiom', meaning:'To create a complicated situation that causes more problems than it solves.', examples:['The investigation <em>opened a can of worms</em> nobody had anticipated.'] },
+    { term:'beat around the bush', pos:'idiom', meaning:'To avoid getting to the main point; to speak indirectly.', examples:['Stop <em>beating around the bush</em> and tell me your decision.'] },
+    { term:'have the upper hand', pos:'idiom', meaning:'To be in a position of advantage or control.', examples:['After the leak, the opposition finally <em>had the upper hand</em>.'] },
+    { term:'weather the storm', pos:'idiom', meaning:'To survive a difficult period.', examples:['The company has <em>weathered storms</em> before and will do so again.'] },
+    { term:'burn one\'s bridges', pos:'idiom', meaning:'To permanently destroy a relationship or future opportunity.', examples:['Resigning without notice means she has <em>burned her bridges</em>.'] },
+    { term:'bite the bullet', pos:'idiom', meaning:'To endure a painful situation or make a hard unavoidable decision.', examples:['They will have to <em>bite the bullet</em> and announce further cuts.'] },
+    { term:'a double-edged sword', pos:'idiom', meaning:'Something with both advantages and disadvantages.', examples:['Transparency is <em>a double-edged sword</em> — it builds trust but exposes vulnerability.'] },
+    { term:'skate on thin ice', pos:'idiom', meaning:'To take serious risks; to be in a precarious situation.', examples:['The minister is <em>skating on thin ice</em> with the allegations unresolved.'] },
+    { term:'at loggerheads', pos:'idiom', meaning:'In strong, persistent disagreement.', examples:['The two departments have been <em>at loggerheads</em> over the budget for months.'] },
+    { term:'pull strings', pos:'idiom', meaning:'To use personal influence to gain an advantage.', examples:['It seemed as though someone was <em>pulling strings</em> behind the scenes.'] },
+    { term:'bury the hatchet', pos:'idiom', meaning:'To end a conflict; to make peace.', examples:['After years of rivalry, the two firms finally <em>buried the hatchet</em>.'] },
+    { term:'pie in the sky', pos:'idiom', meaning:'An idea that is unrealistically optimistic or impractical.', examples:['The proposal sounds appealing, but it\'s <em>pie in the sky</em> without funding.'] },
+    { term:'reinvent the wheel', pos:'idiom', meaning:'To waste effort creating something that already exists.', examples:['There is no need to <em>reinvent the wheel</em> — existing frameworks can be adapted.'] },
+    { term:'rock the boat', pos:'idiom', meaning:'To cause unnecessary trouble or disturb a stable situation.', examples:['None of the board members wanted to <em>rock the boat</em> before the results.'] },
+    { term:'in the red / in the black', pos:'idiom pair', meaning:'"In the red" = losing money. "In the black" = profitable.', examples:['The firm has been <em>in the red</em> for three consecutive quarters.'] },
+    { term:'at the eleventh hour', pos:'idiom', meaning:'At the last possible moment before a deadline.', examples:['A deal was struck <em>at the eleventh hour</em>, averting a strike.'] },
+    { term:'pass the buck', pos:'idiom', meaning:'To shift responsibility to someone else.', examples:['He consistently <em>passes the buck</em> rather than taking ownership.'] },
+    { term:'go down like a lead balloon', pos:'idiom', meaning:'To be received very badly.', examples:['His attempt at humour <em>went down like a lead balloon</em>.'] },
+    { term:'see eye to eye', pos:'idiom', meaning:'To agree completely with someone.', examples:['The two directors don\'t always <em>see eye to eye</em> on strategy.'] },
+    { term:'at the helm', pos:'idiom', meaning:'In charge; in a leadership position.', examples:['With a new CEO <em>at the helm</em>, investors are cautiously optimistic.'] },
+    { term:'a storm in a teacup', pos:'idiom (BrE)', meaning:'A lot of fuss about something not very important.', examples:['What seemed like a major crisis turned out to be <em>a storm in a teacup</em>.'] },
+    { term:'move the goalposts', pos:'idiom', meaning:'To change the rules or criteria unfairly mid-process.', examples:['Every time we met the requirements, they <em>moved the goalposts</em>.'] },
+    { term:'the tip of the iceberg', pos:'idiom', meaning:'A small visible part of a much larger problem.', examples:['The few cases that came to light were merely <em>the tip of the iceberg</em>.'] },
+    { term:'on borrowed time', pos:'idiom', meaning:'Surviving longer than expected; likely to end soon.', examples:['The coalition government is clearly <em>on borrowed time</em>.'] },
+    { term:'a foregone conclusion', pos:'idiom', meaning:'A result certain before it happens; completely predictable.', examples:['The re-election was widely seen as <em>a foregone conclusion</em>.'] },
+    { term:'in the same breath', pos:'idiom', meaning:'At the same time; often highlighting a contradiction.', examples:['He praised the employees and, <em>in the same breath</em>, announced the layoffs.'] },
+    { term:'draw a line under', pos:'idiom', meaning:'To decide something is finished and should not be revisited.', examples:['The settlement was intended to <em>draw a line under</em> years of litigation.'] },
+    { term:'take with a pinch of salt', pos:'idiom', meaning:'To be sceptical about something; not to take it literally.', examples:['His optimistic forecasts should be <em>taken with a pinch of salt</em>.'] },
+    { term:'blow the whistle on', pos:'idiom', meaning:'To expose wrongdoing by reporting it.', examples:['She <em>blew the whistle on</em> the accounting irregularities.'] },
+    { term:'keep a low profile', pos:'idiom', meaning:'To avoid attracting attention or publicity.', examples:['Following the scandal, the minister chose to <em>keep a low profile</em>.'] },
+    { term:'give someone the benefit of the doubt', pos:'idiom', meaning:'To accept someone\'s explanation as true without proof.', examples:['In the absence of evidence to the contrary, we should <em>give him the benefit of the doubt</em>.'] },
+    { term:'a level playing field', pos:'idiom', meaning:'A situation in which all parties compete under the same conditions.', examples:['The reforms were designed to create <em>a level playing field</em>.'] },
+    { term:'gain ground', pos:'idiom', meaning:'To make progress; to become more accepted.', examples:['The opposition is gradually <em>gaining ground</em> in the polls.'] },
+    { term:'ring-fence', pos:'idiom / verb', meaning:'To protect an area from cuts or interference.', examples:['The education budget has been <em>ring-fenced</em> despite wider cuts.'] },
+    { term:'go back to the drawing board', pos:'idiom', meaning:'To start planning again from the beginning after a failure.', examples:['After the rejection, the team had to <em>go back to the drawing board</em>.'] },
+    { term:'throw down the gauntlet', pos:'idiom', meaning:'To make a challenge or demand; to provoke someone.', examples:['The new legislation <em>threw down the gauntlet</em> to the entire industry.'] },
+    { term:'leave no stone unturned', pos:'idiom', meaning:'To try every possible means to achieve something.', examples:['The investigators promised to <em>leave no stone unturned</em> in their search.'] },
+    { term:'cut to the chase', pos:'idiom', meaning:'To get to the important point immediately, without preamble.', examples:['Let me <em>cut to the chase</em>: the project is over budget.'] },
+    { term:'in the pipeline', pos:'idiom', meaning:'Being planned or in preparation; forthcoming.', examples:['Several new initiatives are <em>in the pipeline</em>.','Further legislation is reportedly <em>in the pipeline</em>.'] },
+    { term:'set a precedent', pos:'idiom', meaning:'To establish a standard for future cases.', examples:['The ruling <em>sets a dangerous precedent</em> for future cases.'] },
+    { term:'in the doldrums', pos:'idiom', meaning:'In a period of little activity, growth, or progress.', examples:['The economy has been <em>in the doldrums</em> for several quarters.'] },
+    { term:'fly in the face of', pos:'idiom', meaning:'To be completely contrary to; to openly go against.', examples:['This policy <em>flies in the face of</em> all available evidence.'] },
+    { term:'bear fruit', pos:'idiom', meaning:'To produce results or yield benefits.', examples:['Years of investment are finally beginning to <em>bear fruit</em>.','The research programme has not yet <em>borne fruit</em>.'] },
+    { term:'pave the way for', pos:'idiom', meaning:'To create conditions that make something possible.', examples:['The agreement <em>paves the way for</em> full diplomatic relations.'] },
+    { term:'a watershed moment', pos:'idiom', meaning:'A turning point after which things will never be the same.', examples:['The trial was <em>a watershed moment</em> in the history of civil rights.'] },
+    { term:'keep tabs on', pos:'idiom', meaning:'To monitor someone or something carefully.', examples:['The regulator is <em>keeping close tabs on</em> the company\'s compliance.'] },
+    { term:'put something on the back burner', pos:'idiom', meaning:'To delay dealing with something, giving it lower priority.', examples:['The proposal was <em>put on the back burner</em> due to funding constraints.'] },
+    { term:'on the cusp of', pos:'idiom', meaning:'At the point where something is about to happen.', examples:['The technology is <em>on the cusp of</em> widespread commercial deployment.'] },
+    { term:'a baptism of fire', pos:'idiom', meaning:'A difficult introduction to a new role or experience.', examples:['Her first week as CEO was a real <em>baptism of fire</em>.'] },
+    { term:'hedge one\'s bets', pos:'idiom', meaning:'To protect oneself against risk by supporting more than one option.', examples:['By investing in multiple markets, the fund was <em>hedging its bets</em>.'] },
+    { term:'paper over the cracks', pos:'idiom', meaning:'To conceal problems superficially without solving them.', examples:['The agreement merely <em>papers over the cracks</em> in the coalition.'] },
+    { term:'tilt the balance', pos:'idiom', meaning:'To shift something towards a particular outcome.', examples:['This new evidence could <em>tilt the balance</em> in favour of the defence.'] },
+    { term:'come to a standstill', pos:'idiom', meaning:'To stop completely.', examples:['Production <em>came to a complete standstill</em> during the strike.'] },
+    { term:'take the bull by the horns', pos:'idiom', meaning:'To deal with a difficult situation in a direct and determined way.', examples:['It was time to <em>take the bull by the horns</em> and confront the board.'] },
+    { term:'on the back foot', pos:'idiom', meaning:'In a defensive or disadvantaged position.', examples:['The minister was immediately <em>put on the back foot</em> by the revelation.'] },
+    { term:'push the envelope', pos:'idiom', meaning:'To go beyond accepted limits; to do something more extreme than before.', examples:['The research team is constantly <em>pushing the envelope</em> of what is technologically feasible.'] },
+    { term:'a blessing in disguise', pos:'idiom', meaning:'Something that appears bad but turns out to be beneficial.', examples:['Losing that contract turned out to be <em>a blessing in disguise</em>.'] },
+    { term:'hit the nail on the head', pos:'idiom', meaning:'To describe or identify something exactly correctly.', examples:['Her analysis really <em>hit the nail on the head</em>.'] },
+    { term:'in full swing', pos:'idiom', meaning:'At the most active stage; in full operation.', examples:['The election campaign is now <em>in full swing</em>.','Reconstruction is <em>in full swing</em>.'] },
+    { term:'steal a march on', pos:'idiom', meaning:'To gain an advantage over someone by acting before they do.', examples:['The company has <em>stolen a march on</em> its rivals by filing the patent first.'] },
+    { term:'bring to heel', pos:'idiom', meaning:'To force to obey or submit to authority.', examples:['The regulator moved swiftly to <em>bring the company to heel</em>.'] },
+  ]
+},
+
+fixed: {
+  title: 'Fixed Phrases & Discourse Markers',
+  intro: 'Standard phrases used in formal writing and speech to organise arguments, signal concessions, and express logical relationships. Essential for IELTS Academic, CAE, CPE, and professional writing.',
+  entries: [
+    { term:'given (that)', pos:'prep / conj', meaning:'Taking into account; considering. More formal than "because of" or "since".', examples:['<em>Given</em> the available evidence, further investigation is essential.','<em>Given that</em> resources are limited, prioritisation is unavoidable.'] },
+    { term:'that said', pos:'discourse marker', meaning:'However; in spite of what was just mentioned.', examples:['The plan has several flaws. <em>That said</em>, it represents a significant step forward.'], note:'Near-equivalents: nevertheless, nonetheless, be that as it may, even so.' },
+    { term:'notwithstanding', pos:'prep / adverb', meaning:'In spite of; nevertheless (very formal; often legal).', examples:['<em>Notwithstanding</em> these objections, the board voted to proceed.','The risks, <em>notwithstanding</em>, were deemed acceptable.'] },
+    { term:'if substantiated', pos:'conditional clause', meaning:'If proved to be true (formal passive structure).', examples:['The allegations, <em>if substantiated</em>, would constitute a serious breach of trust.'] },
+    { term:'for all intents and purposes', pos:'fixed phrase', meaning:'In every practical sense; effectively.', examples:['The company has, <em>for all intents and purposes</em>, ceased trading.'] },
+    { term:'under no illusions', pos:'fixed phrase', meaning:'Fully and realistically aware of a difficult situation.', examples:['We are <em>under no illusions</em> about the scale of the challenge ahead.'] },
+    { term:'wide of the mark', pos:'fixed phrase', meaning:'Inaccurate; significantly missing the point or target.', examples:['His predictions proved <em>wide of the mark</em>.'] },
+    { term:'apart from', pos:'prep phrase', meaning:'With the exception of; besides.', examples:['<em>Apart from</em> a few minor inconsistencies, the report is thorough.'] },
+    { term:'open to interpretation', pos:'adj phrase', meaning:'Capable of being understood in more than one way; ambiguous.', examples:['The wording of the clause is deliberately <em>open to interpretation</em>.'] },
+    { term:'paradigm shift', pos:'noun phrase', meaning:'A fundamental change in underlying assumptions or approach.', examples:['The internet represented a <em>paradigm shift</em> in human communication.'] },
+    { term:'with flying colours', pos:'fixed phrase', meaning:'With great success; achieving an excellent result.', examples:['She passed the bar examination <em>with flying colours</em>.'] },
+    { term:'against the advice of', pos:'prep phrase', meaning:'Not following the recommendation of.', examples:['The procedure was carried out <em>against the advice of</em> the medical team.'] },
+    { term:'by the same token', pos:'discourse marker', meaning:'For the same reason; equally.', examples:['You cannot demand transparency and, <em>by the same token</em>, refuse to disclose your own finances.'] },
+    { term:'it stands to reason that', pos:'fixed phrase', meaning:'It is logical or obvious that.', examples:['<em>It stands to reason that</em> increased demand will push prices up.'] },
+    { term:'in the final analysis', pos:'discourse marker', meaning:'When everything has been considered; ultimately.', examples:['<em>In the final analysis</em>, the decision rests with the electorate.'] },
+    { term:'at one\'s discretion', pos:'prep phrase', meaning:'According to one\'s own judgement.', examples:['The penalty may be waived <em>at the judge\'s discretion</em>.'] },
+    { term:'by the same token', pos:'discourse marker', meaning:'Equally; for the same reason.', examples:['Efficiency must be improved. <em>By the same token</em>, quality cannot be sacrificed.'] },
+    { term:'cut corners', pos:'fixed phrase', meaning:'To do something to a lower standard to save time or money.', examples:['Safety risks arose because contractors had <em>cut corners</em>.'] },
+    { term:'it is worth noting that', pos:'fixed phrase', meaning:'A standard academic marker drawing attention to a detail.', examples:['<em>It is worth noting that</em> the study involved only a small sample.'] },
+    { term:'on balance', pos:'discourse marker', meaning:'Taking everything into consideration; overall.', examples:['<em>On balance</em>, the advantages appear to outweigh the risks.'] },
+    { term:'suffice it to say', pos:'fixed phrase', meaning:'It is enough to say; I will say only this much.', examples:['<em>Suffice it to say</em>, the outcome was not what anyone had hoped for.'] },
+    { term:'in no uncertain terms', pos:'fixed phrase', meaning:'Very clearly and directly; without ambiguity.', examples:['She told him <em>in no uncertain terms</em> that his conduct was unacceptable.'] },
+    { term:'for the record', pos:'fixed phrase', meaning:'To state something officially; so there is no misunderstanding.', examples:['<em>For the record</em>, I was not present at that meeting.'] },
+    { term:'to that end', pos:'discourse marker', meaning:'In order to achieve that goal.', examples:['We need more qualified staff. <em>To that end</em>, the training budget has been doubled.'] },
+    { term:'by no means', pos:'fixed phrase', meaning:'Not at all; absolutely not.', examples:['This is <em>by no means</em> a simple matter.','<em>By no means</em> is this problem unique to our sector.'] },
+    { term:'in retrospect', pos:'fixed phrase', meaning:'Looking back with knowledge one has now.', examples:['<em>In retrospect</em>, the early warning signs were clearly visible.'] },
+    { term:'inasmuch as', pos:'conj (formal)', meaning:'To the extent that; given that; because.', examples:['The decision was justified, <em>inasmuch as</em> no other option was available.'], note:'Exclusively formal/written register.' },
+    { term:'in due course', pos:'fixed phrase', meaning:'At the appropriate time; eventually.', examples:['The committee will publish its findings <em>in due course</em>.'] },
+    { term:'with the benefit of hindsight', pos:'fixed phrase', meaning:'Looking back with knowledge gained after the event.', examples:['<em>With the benefit of hindsight</em>, the decision was clearly an error.'] },
+    { term:'the fact of the matter is', pos:'fixed phrase', meaning:'Used to introduce the truth, especially when contradicting an assumption.', examples:['<em>The fact of the matter is</em> that no easy solution exists.'] },
+    { term:'all things being equal', pos:'fixed phrase', meaning:'If conditions remain the same; other factors aside.', examples:['<em>All things being equal</em>, the project should be completed on time.'] },
+    { term:'needless to say', pos:'fixed phrase', meaning:'Introducing something that should be obvious, but bears stating.', examples:['<em>Needless to say</em>, the announcement was met with disbelief.'] },
+    { term:'at face value', pos:'fixed phrase', meaning:'As something appears on the surface, without deeper investigation.', examples:['These figures should not be taken <em>at face value</em>.','It is tempting to accept the proposal <em>at face value</em>, but closer inspection reveals problems.'] },
+    { term:'without prejudice', pos:'fixed phrase (legal)', meaning:'Without affecting legal rights; without prejudging a case.', examples:['The letter was sent <em>without prejudice</em> and cannot be used as evidence.','Negotiations were conducted <em>without prejudice</em> to either party\'s position.'], note:'Common in legal and commercial correspondence.' },
+    { term:'by a wide margin', pos:'fixed phrase', meaning:'By a large amount; decisively.', examples:['She won the vote <em>by a wide margin</em>.','The proposal was defeated <em>by a wide margin</em>.'] },
+    { term:'in the same vein', pos:'fixed phrase', meaning:'In the same style or manner; similarly.', examples:['<em>In the same vein</em>, the second report concludes that intervention is necessary.'] },
+    { term:'lend credence to', pos:'verb phrase', meaning:'To make something more believable or plausible.', examples:['The new testimony <em>lends considerable credence to</em> the prosecution\'s case.','This evidence <em>lends credence to</em> the conspiracy theory.'] },
+    { term:'in the long run', pos:'fixed phrase', meaning:'Over a long period; ultimately.', examples:['<em>In the long run</em>, investment in education yields the greatest returns.'] },
+    { term:'at cross purposes', pos:'fixed phrase', meaning:'Misunderstanding each other due to different assumptions or goals.', examples:['The two departments have been working <em>at cross purposes</em> for months.'] },
+    { term:'a moot point', pos:'fixed phrase', meaning:'A debatable or irrelevant point; one with no practical significance.', examples:['Whether the original decision was correct is now <em>a moot point</em>.'] },
+  ]
+},
+
+register: {
+  title: 'Formal Register',
+  intro: 'Formal register requires replacing colloquial or imprecise language with accurate, elevated vocabulary. Essential for C1/C2 writing tasks, academic essays, and professional communication.',
+  entries: [
+    { term:'find out → ascertain', pos:'verb (informal → formal)', meaning:'To discover or establish something with certainty.', examples:['Investigators sought to <em>ascertain</em> whether the regulations had been breached.'] },
+    { term:'use → utilise / employ', pos:'verb (informal → formal)', meaning:'"Utilise" = make effective use of. "Employ" = use in a systematic way.', examples:['The model <em>utilises</em> machine learning.','A novel methodology was <em>employed</em> in the study.'] },
+    { term:'get worse → deteriorate', pos:'verb (informal → formal)', meaning:'To become progressively worse.', examples:['Relations between the two nations have <em>deteriorated</em> markedly.'] },
+    { term:'start / come into effect', pos:'verb phrase', meaning:'(Of a law or policy) to begin operating officially.', examples:['The legislation will <em>come into effect</em> on 1 January.'] },
+    { term:'say → acknowledge / assert / concede / contend / maintain', pos:'reporting verbs', meaning:'Each carries a specific attitude: acknowledge (admit), assert (claim), concede (yield), contend (argue), maintain (continue to claim despite opposition).', examples:['The minister <em>acknowledged</em> that further cuts were unavoidable.','The report <em>asserts</em> that risks were understated.','She <em>maintains</em> her innocence.','Counsel <em>contends</em> that the contract was never valid.'] },
+    { term:'agree with → corroborate / substantiate', pos:'verb (informal → formal)', meaning:'"Corroborate" = confirm with evidence. "Substantiate" = prove with evidence.', examples:['The forensic evidence <em>corroborates</em> the witness\'s account.','The claimant failed to <em>substantiate</em> the allegations.'] },
+    { term:'get rid of → abolish / eradicate / eliminate', pos:'verb (informal → formal)', meaning:'"Abolish" = formally end. "Eradicate" = destroy completely. "Eliminate" = remove.', examples:['The government pledged to <em>abolish</em> the tax.','The aim is to <em>eradicate</em> extreme poverty by 2030.'] },
+    { term:'go up → escalate / surge / rise sharply', pos:'verb phrase', meaning:'"Escalate" = increase progressively. "Surge" = increase suddenly.', examples:['Costs have <em>escalated</em> well beyond projections.','Unemployment <em>surged</em> following the closures.'] },
+    { term:'put off → postpone / defer', pos:'verb (informal → formal)', meaning:'"Postpone" = rearrange for later. "Defer" = delay pending conditions.', examples:['The hearing has been <em>postponed</em> pending evidence.','A final decision was <em>deferred</em> until the next session.'] },
+    { term:'warrant (formal "needs")', pos:'verb (formal)', meaning:'"Warrant" = to justify, merit, or make necessary.', examples:['The matter <em>warrants</em> further investigation.','Such allegations <em>warrant</em> an immediate response.'] },
+    { term:'turn down → reject / decline / dismiss', pos:'verb (informal → formal)', meaning:'"Decline" (polite), "reject" (firm), "dismiss" (contemptuous).', examples:['The application was <em>rejected</em> on procedural grounds.','She <em>declined</em> to comment.','The judge <em>dismissed</em> the appeal as wholly without merit.'] },
+    { term:'look into → investigate / examine / probe', pos:'verb (informal → formal)', meaning:'"Investigate" = formal inquiry. "Examine" = careful analysis. "Probe" = searching inquiry.', examples:['A committee was established to <em>investigate</em> the allegations.','Auditors were called in to <em>examine</em> the accounts.'] },
+    { term:'show → demonstrate / illustrate / indicate / reveal', pos:'verb group', meaning:'Precise alternatives: demonstrate (prove), illustrate (exemplify), indicate (suggest), reveal (uncover).', examples:['The data <em>demonstrate</em> a clear causal link.','This case <em>illustrates</em> the wider problem.','Early results <em>indicate</em> a shift.','The audit <em>revealed</em> irregularities.'] },
+    { term:'help → facilitate / enable / assist', pos:'verb (informal → formal)', meaning:'"Facilitate" = make possible. "Enable" = give means. "Assist" = provide support.', examples:['The software will <em>facilitate</em> faster processing.','The grant will <em>enable</em> the charity to expand.'] },
+    { term:'important → significant / pivotal / critical / crucial / paramount', pos:'adj group', meaning:'Degrees: significant (notable), crucial/critical (essential), pivotal (turning point), paramount (supreme).', examples:['This is a <em>pivotal</em> moment.','Access to clean water is <em>critical</em> for public health.','Security is of <em>paramount</em> importance.'] },
+    { term:'but → however / nevertheless / nonetheless / yet / that said', pos:'conj group', meaning:'Formal adversative connectors. "Nevertheless/nonetheless" signal stronger concessions.', examples:['The evidence is compelling. <em>Nevertheless</em>, further testing is required.','The challenge is significant; <em>however</em>, it is not insurmountable.'] },
+    { term:'do → undertake / conduct / carry out / perform', pos:'verb group', meaning:'Formal alternatives for "do" with specific nouns.', examples:['The committee will <em>undertake</em> a thorough review.','A study was <em>conducted</em> by an independent body.','Tests were <em>carried out</em> over a six-month period.','The surgeon <em>performed</em> the procedure.'] },
+    { term:'need → require / necessitate / call for', pos:'verb (informal → formal)', meaning:'"Require" = need formally. "Necessitate" = make necessary. "Call for" = demand.', examples:['The situation <em>requires</em> urgent attention.','The scale of the problem <em>necessitates</em> a systemic response.','The findings <em>call for</em> immediate action.'] },
+    { term:'start → initiate / commence / launch / instigate', pos:'verb group', meaning:'Formal synonyms for "start", each with nuances of agency and formality.', examples:['The government <em>initiated</em> a formal review.','Proceedings have <em>commenced</em>.','An inquiry was <em>launched</em>.','He was accused of <em>instigating</em> the unrest.'] },
+    { term:'end → conclude / terminate / cease / discontinue', pos:'verb group', meaning:'"Conclude" = come to an end naturally. "Terminate" = bring to an end formally. "Cease" = stop. "Discontinue" = stop a practice.', examples:['The trial has <em>concluded</em>.','The contract was <em>terminated</em> with immediate effect.','Production has <em>ceased</em>.','The drug was <em>discontinued</em> due to side effects.'] },
+    { term:'think → consider / deliberate / contemplate / envisage', pos:'verb group', meaning:'Different degrees and types of mental activity: consider (weigh up), deliberate (discuss carefully), contemplate (think deeply), envisage (imagine a future scenario).', examples:['The board is <em>considering</em> its options.','The committee <em>deliberated</em> for two days.','The report <em>envisages</em> a 20% reduction in emissions.'] },
+    { term:'get → obtain / acquire / procure / secure', pos:'verb (informal → formal)', meaning:'"Obtain" = acquire through effort. "Procure" = formal/legal. "Secure" = obtain with effort/competition.', examples:['Funding was <em>obtained</em> from a private source.','Materials must be <em>procured</em> through an approved supplier.','She <em>secured</em> a majority on the committee.'] },
+    { term:'check → verify / scrutinise / audit / validate', pos:'verb group', meaning:'"Verify" = confirm accuracy. "Scrutinise" = examine closely. "Audit" = formal official check. "Validate" = confirm officially.', examples:['All data was independently <em>verified</em>.','The accounts were <em>audited</em> externally.','The methodology was <em>validated</em> by a peer review panel.'] },
+    { term:'result in → give rise to / bring about / culminate in / lead to', pos:'verb group', meaning:'Formal alternatives for "result in", varying by type of causation.', examples:['The strike <em>culminated in</em> the resignation of the entire board.','The reforms <em>gave rise to</em> widespread unrest.'] },
+    { term:'about → regarding / concerning / with respect to / pertaining to', pos:'prep (informal → formal)', meaning:'"Regarding / concerning" = general formal use. "Pertaining to" = formal/legal.', examples:['Please contact us <em>regarding</em> your application.','All documents <em>pertaining to</em> the case must be disclosed.'] },
+  ]
+},
+
+wordform: {
+  title: 'Word Formation',
+  intro: 'Word formation at C1/C2 requires precision with prefixes, suffixes, and derivational patterns. These are tested directly in Use of English papers (CAE, CPE) and indicate mastery of the lexical system.',
+  entries: [
+    { term:'Prefix: un- (negation)', pos:'prefix', meaning:'Creates negative adjectives and past participles.', examples:['<em>unprecedented, undeterred, unsubstantiated, unequivocal, unfounded, untenable, unwarranted</em>'] },
+    { term:'Prefix: in- / im- / ir- / il-', pos:'prefix', meaning:'"In-" before most consonants; "im-" before m/p; "ir-" before r; "il-" before l.', examples:['<em>inexplicable, inherent, incompatible, implicit</em>','<em>impractical, implausible, impunity</em>','<em>irrefutable, irreversible, irreconcilable, irresponsible</em>','<em>illicit, illegitimate, illogical</em>'] },
+    { term:'Prefix: dis-', pos:'prefix', meaning:'Reversal or negation.', examples:['<em>disregard, discredit, dismantle, disproportionate, dissent, discrepancy</em>'] },
+    { term:'Prefix: mis-', pos:'prefix', meaning:'Wrongly or badly.', examples:['<em>misrepresent, misconstrue, misappropriate, mitigate (N/A)</em>','correct: <em>misinterpret, mislead, mismanage, misguide</em>'] },
+    { term:'Prefix: counter-', pos:'prefix', meaning:'Against; in opposition to.', examples:['<em>counterproductive, counterintuitive, counterargument, countermeasure, counterpart</em>'] },
+    { term:'Prefix: over- / under-', pos:'prefix pair', meaning:'"Over-" = excessively. "Under-" = insufficiently.', examples:['<em>overstate / understate, overestimate / underestimate</em>','<em>overrepresented / underrepresented, oversimplify, underfunded</em>'] },
+    { term:'Prefix: out-', pos:'prefix', meaning:'To do something better than or beyond.', examples:['<em>outperform, outnumber, outlast, outweigh, outstrip</em>'] },
+    { term:'Suffix: -tion / -sion / -ation', pos:'suffix', meaning:'Forms abstract nouns from verbs.', examples:['constrain → <em>constraint</em>','displace → <em>displacement</em>','implement → <em>implementation</em>','substantiate → <em>substantiation</em>','deteriorate → <em>deterioration</em>','rationalise → <em>rationalisation</em>'] },
+    { term:'Suffix: -ity / -ty', pos:'suffix', meaning:'Forms abstract nouns, often from adjectives.', examples:['feasible → <em>feasibility</em>','viable → <em>viability</em>','accountable → <em>accountability</em>','ambiguous → <em>ambiguity</em>','inevitable → <em>inevitability</em>','plausible → <em>plausibility</em>'] },
+    { term:'Suffix: -ness', pos:'suffix', meaning:'Forms nouns from adjectives. Very productive.', examples:['thorough → <em>thoroughness</em>','tactless → <em>tactlessness</em>','willing → <em>willingness</em>','apt → <em>aptness</em>','stark → <em>starkness</em>'] },
+    { term:'Suffix: -itude', pos:'suffix', meaning:'Forms abstract nouns (often C2 level).', examples:['inept → <em>ineptitude</em>','apt → <em>aptitude</em>','turp → <em>turpitude</em>','solicit → <em>solicitude</em>'] },
+    { term:'Suffix: -al', pos:'suffix', meaning:'Forms nouns from verbs.', examples:['rebut → <em>rebuttal</em>','withdraw → <em>withdrawal</em>','propose → <em>proposal</em>','arrive → <em>arrival</em>','betray → <em>betrayal</em>','deny → <em>denial</em>'] },
+    { term:'Suffix: -ism / -ist', pos:'suffix pair', meaning:'-ism = ideology; -ist = person.', examples:['sceptic → <em>scepticism</em>','pragmatic → <em>pragmatism / pragmatist</em>','cynic → <em>cynicism</em>','opportunist → <em>opportunism</em>'] },
+    { term:'Suffix: -ent / -ence, -ant / -ance', pos:'suffix group', meaning:'Adjectives ending -ent/-ant; nouns ending -ence/-ance.', examples:['persist → <em>persistent / persistence</em>','comply → <em>compliant / compliance</em>','depend → <em>dependent / dependence</em>','signify → <em>significant / significance</em>'], note:'A common spelling pitfall at C2. Learn both forms together.' },
+    { term:'Suffix: -fy / -ify', pos:'suffix', meaning:'Forms verbs meaning "to make" or "to cause to be".', examples:['simple → <em>simplify</em>','intense → <em>intensify</em>','just → <em>justify</em>','solid → <em>solidify</em>','class → <em>classify</em>'] },
+    { term:'Suffix: -ment, -age, -ship, -dom', pos:'suffix group', meaning:'Common patterns for abstract nouns.', examples:['-ment: achieve → <em>achievement</em>, assess → <em>assessment</em>','-age: short → <em>shortage</em>','-ship: leader → <em>leadership</em>, partner → <em>partnership</em>','-dom: free → <em>freedom</em>, wise → <em>wisdom</em>'] },
+    { term:'Suffix: -ous / -ious (adj)', pos:'suffix', meaning:'Forms adjectives from nouns.', examples:['vigour → <em>vigorous</em>','ambition → <em>ambitious</em>','caution → <em>cautious</em>','contention → <em>contentious</em>','controversy → <em>controversial</em>'] },
+    { term:'Suffix: -ive / -ative / -itive (adj)', pos:'suffix', meaning:'Forms adjectives denoting tendency or quality.', examples:['persuade → <em>persuasive</em>','assert → <em>assertive</em>','imagine → <em>imaginative</em>','compete → <em>competitive</em>','cognition → <em>cognitive</em>'] },
+    { term:'unprecedented', pos:'adj (C2)', meaning:'Never having happened before.', examples:['The scale of the disaster was <em>unprecedented</em> in modern history.'] },
+    { term:'counterproductive', pos:'adj (C2)', meaning:'Producing the opposite of the intended result.', examples:['Harsh punishments are often <em>counterproductive</em>.'] },
+    { term:'irrefutable / irrefutably', pos:'adj / adv (C2)', meaning:'Impossible to disprove.', examples:['The prosecution presented what it called <em>irrefutable</em> evidence.'] },
+    { term:'inexplicable / inexplicably', pos:'adj / adv (C2)', meaning:'Impossible to explain.', examples:['She <em>inexplicably</em> withdrew her application at the last moment.'] },
+    { term:'indisputable / indisputably', pos:'adj / adv (C2)', meaning:'Not able to be challenged or denied.', examples:['She is <em>indisputably</em> the most qualified candidate.'] },
+    { term:'inconceivable / inconceivably', pos:'adj / adv (C2)', meaning:'Impossible to imagine.', examples:['It is <em>inconceivable</em> that nobody was aware of the problem.'] },
+    { term:'unequivocal / unequivocally', pos:'adj / adv (C2)', meaning:'Leaving no doubt; completely clear.', examples:['The committee\'s message was <em>unequivocal</em>: the policy must change.'] },
+    { term:'disproportionate / disproportionately', pos:'adj / adv (C2)', meaning:'Too large or too small in relation to something.', examples:['The penalty was widely seen as <em>disproportionate</em> to the offence.','Women are <em>disproportionately</em> affected by the cuts.'] },
+    { term:'discrepancy', pos:'noun (C2)', meaning:'A difference between things that should be the same.', examples:['There is a significant <em>discrepancy</em> between the two sets of figures.'] },
+  ]
+},
+
+confusables: {
+  title: 'Confusables',
+  intro: 'Words frequently confused at C1/C2 level — because they look similar, are false friends, or are commonly misused even by advanced speakers. These are classic exam pitfalls.',
+  entries: [
+    { term:'affect (verb) vs effect (noun)', pos:'classic pair', meaning:'"Affect" = to have an impact on (verb). "Effect" = a result (noun).', examples:['The drought has severely <em>affected</em> crop yields.','The <em>effect</em> of the drought has been severe.'], note:'"Effect" can also be a verb = "to bring about": "to <em>effect</em> change" — rare but tested at C2.' },
+    { term:'fewer vs less', pos:'determiner pair', meaning:'"Fewer" with countable nouns. "Less" with uncountable nouns.', examples:['<em>Fewer</em> participants attended than expected.','There was <em>less</em> enthusiasm than anticipated.'] },
+    { term:'imply vs infer', pos:'verb pair', meaning:'"Imply" = to suggest (speaker/writer). "Infer" = to deduce (reader/listener).', examples:['The data <em>imply</em> a causal relationship.','From the data, we can <em>infer</em> a causal relationship.'], note:'Error: "The report *infers* that..." should be "The report *implies* that..."' },
+    { term:'economic vs economical', pos:'adjective pair', meaning:'"Economic" = relating to the economy. "Economical" = cost-effective; not wasteful.', examples:['The country faces serious <em>economic</em> challenges.','An <em>economical</em> use of resources is essential.'] },
+    { term:'comprehensive vs comprehensible', pos:'adjective pair', meaning:'"Comprehensive" = thorough; covering all aspects. "Comprehensible" = understandable.', examples:['She produced a <em>comprehensive</em> report.','The explanation was barely <em>comprehensible</em> to a non-specialist.'] },
+    { term:'further vs farther', pos:'adverb pair', meaning:'"Further" = additional; more (abstract). "Farther" = greater physical distance.', examples:['We need to go <em>further</em> in our analysis.','The second site is <em>farther</em> from the city centre.'] },
+    { term:'daunted vs daunting', pos:'-ed / -ing adjective pair', meaning:'"-ed" = how a person feels. "-ing" = property of the thing causing the feeling.', examples:['She felt <em>daunted</em> by the complexity.','The complexity of the task was <em>daunting</em>.'], note:'Applies to all such pairs: overwhelmed/overwhelming, frustrated/frustrating.' },
+    { term:'accept vs agree', pos:'verb pair', meaning:'"Accept" + noun (offer, responsibility, proposal). "Agree to do" or "agree on" a point.', examples:['She <em>accepted</em> full responsibility.','The board <em>agreed to</em> delay the vote.'], note:'"Accept to do" is a very common non-native error.' },
+    { term:'despite vs although', pos:'conjunction pair', meaning:'"Despite" + noun/gerund. "Although" + clause.', examples:['<em>Despite</em> the setbacks, progress was made.','<em>Although</em> there were setbacks, progress was made.'], note:'"Despite of" is ALWAYS wrong.' },
+    { term:'sensible vs sensitive', pos:'adjective pair', meaning:'"Sensible" = showing good judgement. "Sensitive" = responsive to feelings; easily affected.', examples:['A <em>sensible</em> approach is essential.','The issue is politically <em>sensitive</em>.'] },
+    { term:'principal vs principle', pos:'homophone pair', meaning:'"Principal" = main (adj) or head of institution (noun). "Principle" = fundamental rule or belief.', examples:['The <em>principal</em> cause was poor communication.','She refused to compromise on her <em>principles</em>.'] },
+    { term:'disinterested vs uninterested', pos:'adjective pair', meaning:'"Disinterested" = impartial; no personal stake. "Uninterested" = not interested.', examples:['We need a <em>disinterested</em> party to arbitrate.','She seemed completely <em>uninterested</em> in the outcome.'], note:'One of the most commonly confused pairs at C2. "Disinterested" ≠ "not interested".' },
+    { term:'comprise vs consist of', pos:'verb pair', meaning:'"Comprise" = be made up of (no "of" after it). "Consist of" = be made up of.', examples:['The committee <em>comprises</em> seven members.','The committee <em>consists of</em> seven members.'], note:'"Comprised of" is widely used but traditionally incorrect in formal writing.' },
+    { term:'alternate vs alternative', pos:'adjective pair', meaning:'"Alternate" = every other one in a sequence. "Alternative" = another option.', examples:['The committee meets on <em>alternate</em> Tuesdays.','We need to find an <em>alternative</em> solution.'], note:'In AmE, "alternate" is also used to mean "alternative".' },
+    { term:'credible vs credulous vs creditable', pos:'adjective trio', meaning:'"Credible" = believable. "Credulous" = too willing to believe; gullible. "Creditable" = deserving praise.', examples:['The witness gave a <em>credible</em> account.','He was <em>credulous</em> enough to fall for the scheme.','She gave a <em>creditable</em> performance under difficult circumstances.'] },
+    { term:'appraise vs apprise', pos:'verb pair', meaning:'"Appraise" = to assess value or quality. "Apprise" = to inform someone (formal).', examples:['The property was <em>appraised</em> at £500,000.','Please keep me <em>apprised</em> of any developments.'] },
+    { term:'mitigate vs militate', pos:'verb pair', meaning:'"Mitigate" = to reduce severity. "Militate (against)" = to be a factor working against.', examples:['Steps were taken to <em>mitigate</em> the environmental impact.','These factors <em>militate against</em> a quick recovery.'] },
+    { term:'reticent vs reluctant', pos:'adjective pair', meaning:'"Reticent" = unwilling to speak openly. "Reluctant" = unwilling to do something.', examples:['He was characteristically <em>reticent</em> about his personal life.','She was <em>reluctant</em> to commit to a specific timeline.'], note:'"Reticent" strictly refers to unwillingness to speak or disclose — not reluctance to act.' },
+    { term:'enormity vs enormousness', pos:'noun pair', meaning:'"Enormity" = the extreme scale of something shocking or morally severe. "Enormousness" = sheer size.', examples:['The <em>enormity</em> of the crime slowly became apparent.','The <em>enormousness</em> of the building was immediately striking.'], note:'Using "enormity" to mean simply "very large" is considered an error in formal writing.' },
+    { term:'unexceptional vs unexceptionable', pos:'adjective pair', meaning:'"Unexceptional" = ordinary; nothing special. "Unexceptionable" = not open to objection; perfectly acceptable.', examples:['His performance was <em>unexceptional</em> — adequate but unremarkable.','The terms of the contract are entirely <em>unexceptionable</em>.'] },
+    { term:'continuous vs continual', pos:'adjective pair', meaning:'"Continuous" = without interruption; unbroken. "Continual" = frequently repeated, but with breaks.', examples:['The machine runs on a <em>continuous</em> loop.','There were <em>continual</em> interruptions throughout the meeting.'] },
+    { term:'historic vs historical', pos:'adjective pair', meaning:'"Historic" = important in history; likely to be remembered. "Historical" = relating to history or the past.', examples:['This is a <em>historic</em> moment for the nation.','The researchers examined <em>historical</em> records dating back to 1800.'] },
+    { term:'practicable vs practical', pos:'adjective pair', meaning:'"Practicable" = able to be done; feasible. "Practical" = sensible; good at getting things done.', examples:['No <em>practicable</em> alternative was identified.','She is an extremely <em>practical</em> person who gets results.'] },
+    { term:'prescribe vs proscribe', pos:'verb pair', meaning:'"Prescribe" = to recommend or officially order. "Proscribe" = to officially forbid.', examples:['The protocol <em>prescribes</em> a specific course of action.','The treaty <em>proscribes</em> the use of chemical weapons.'] },
+    { term:'refute vs rebut vs deny', pos:'verb trio', meaning:'"Refute" = to disprove conclusively. "Rebut" = to argue against. "Deny" = to say it is not true.', examples:['She <em>refuted</em> the allegations with documentary evidence. (proved them wrong)', 'He <em>rebutted</em> each claim in turn. (argued against)', 'The minister simply <em>denied</em> any wrongdoing. (stated it wasn\'t true)'], note:'Using "refute" to mean merely "deny" is a common error in journalism and informal writing.' },
+    { term:'infer vs imply (revisited for writing)', pos:'note', meaning:'Reinforcement: The text/speaker <em>implies</em>; the reader/listener <em>infers</em>.', examples:['The author <em>implies</em> that the government was complicit.','Readers naturally <em>infer</em> that the character is lying.'] },
+  ]
+},
+
+inversion: {
+  title: 'Inversion',
+  intro: 'Inversion — placing the auxiliary before the subject — is a key C1/C2 structure used for emphasis and formal register. It is triggered by specific negative, restrictive, or conditional expressions and is directly tested in CAE and CPE.',
+  entries: [
+    { term:'Not only...but also', pos:'inversion structure', meaning:'Used for emphasis. Inversion required in the first clause; normal order after "but".', examples:['<em>Not only did</em> she misrepresent the facts, but she also destroyed the evidence.','<em>Not only has</em> the company failed to meet targets, but it has also lost key clients.'], note:'The auxiliary (did/has/was/is) goes before the subject. The infinitive is bare.' },
+    { term:'Hardly / Scarcely...when/before', pos:'inversion structure', meaning:'"Almost no time had passed when..." Inversion required.', examples:['<em>Hardly had</em> he sat down when the phone rang.','<em>Scarcely had</em> the announcement been made before protests erupted.'], note:'Use past perfect in the inverted clause. "When/before" — NOT "than".' },
+    { term:'No sooner...than', pos:'inversion structure', meaning:'"Immediately after..." Inversion required.', examples:['<em>No sooner had</em> she left the room than an argument broke out.'], note:'ALWAYS "than" — never "when" with "no sooner".' },
+    { term:'Under no circumstances', pos:'inversion structure', meaning:'For absolute prohibition or denial.', examples:['<em>Under no circumstances should</em> this information be disclosed.','<em>Under no circumstances are</em> visitors permitted beyond this point.'] },
+    { term:'Never / Rarely / Seldom', pos:'inversion structure', meaning:'Negative adverb at the start of a sentence triggers inversion.', examples:['<em>Never before had</em> the country faced such a severe crisis.','<em>Rarely does</em> a study produce such unambiguous results.','<em>Seldom have</em> we witnessed such effective leadership.'] },
+    { term:'Only after / Only when / Only by', pos:'inversion structure', meaning:'"Only + adverbial phrase" at the start triggers inversion in the main clause.', examples:['<em>Only after</em> the vote <em>did</em> the full implications become clear.','<em>Only by</em> restructuring the debt <em>can</em> the company survive.','<em>Only when</em> all evidence has been presented <em>can</em> a verdict be reached.'] },
+    { term:'Such...that / So...that', pos:'inversion (formal emphasis)', meaning:'Used for dramatic effect to emphasise degree or extent.', examples:['<em>Such was</em> the scale of the disaster that international aid was mobilised.','<em>So acute was</em> the shortage that rationing was immediately introduced.'] },
+    { term:'Were it not for / Had it not been for', pos:'conditional inversion', meaning:'Formal alternatives to "If it were not for / If it had not been for". No "if".', examples:['<em>Were it not for</em> the court\'s intervention, the merger would have proceeded.','<em>Had it not been for</em> his quick thinking, the consequences could have been catastrophic.'], note:'Third conditional: "Had she known, she would have acted differently." (= If she had known).' },
+    { term:'On no account', pos:'inversion structure', meaning:'Under no circumstances; strong prohibition.', examples:['<em>On no account should</em> the media be given access to those files.'] },
+    { term:'Little did...know', pos:'inversion structure', meaning:'"Little" in the negative sense at the start.', examples:['<em>Little did</em> anyone <em>know</em> that the company was already insolvent.','<em>Little did</em> she <em>realise</em> how significant that meeting would prove.'] },
+    { term:'At no point / At no time', pos:'inversion structure', meaning:'Used to emphasise that something never happened.', examples:['<em>At no point</em> during the investigation <em>was</em> evidence of fraud found.','<em>At no time did</em> the accused act alone.'] },
+    { term:'Not until / Not since', pos:'inversion structure', meaning:'"Not until/since [time]" at the start triggers inversion in the main clause.', examples:['<em>Not until</em> the report was published <em>did</em> the public grasp the full extent.','<em>Not since</em> the war <em>had</em> the country faced such hardship.'] },
+    { term:'In no way / In no sense', pos:'inversion structure', meaning:'Used to strongly deny or negate something.', examples:['<em>In no way does</em> this decision reflect the views of the committee.','<em>In no sense can</em> this be considered a satisfactory outcome.'] },
+    { term:'Nor / Neither...', pos:'inversion structure', meaning:'"Nor/Neither" at the start of a clause = inversion.', examples:['The first report was inconclusive. <em>Nor did</em> the second provide any clarity.','She could not accept the terms. <em>Neither could</em> her legal team.'] },
+    { term:'Should (formal conditional)', pos:'conditional inversion', meaning:'Formal alternative to "If it should happen that..."', examples:['<em>Should</em> you require further information, please do not hesitate to contact us.','<em>Should</em> the situation change, the committee will reconvene immediately.'], note:'Commonly used in formal correspondence and legal language.' },
+    { term:'Were (present/future hypothetical)', pos:'conditional inversion', meaning:'Formal alternative to "If it were..." (subjunctive).', examples:['<em>Were</em> the evidence more conclusive, a different verdict might have been reached.','<em>Were</em> the company to collapse, thousands of jobs would be at risk.'] },
+    { term:'Had (past hypothetical)', pos:'conditional inversion', meaning:'Formal alternative to "If...had..." in the third conditional.', examples:['<em>Had</em> the government acted sooner, the crisis might have been averted.','<em>Had</em> we been informed, we would have responded immediately.'] },
+  ]
+},
+
+discourse: {
+  title: 'Discourse Markers',
+  intro: 'Discourse markers organise written and spoken text, signalling logical relationships. Mastery of these distinguishes C1 from C2 and is essential for academic writing and formal speech.',
+  entries: [
+    { term:'Addition', pos:'category', meaning:'Adding information, evidence, or arguments in the same direction.', examples:['<em>Furthermore</em>, the evidence suggests a deeper systemic failure.','<em>Moreover</em>, the committee had been warned months in advance.','<em>In addition to</em> this, three witnesses have since retracted their statements.','<em>What is more</em>, the company knew about the risks and did nothing.','<em>Added to this</em>, the regulatory framework is clearly inadequate.','<em>By the same token</em>, the costs of inaction must also be considered.'] },
+    { term:'Contrast & Concession', pos:'category', meaning:'Introducing an opposing or qualifying point.', examples:['<em>Nevertheless</em>, the project continued despite widespread objections.','<em>Notwithstanding</em> these concerns, a decision was reached.','<em>Be that as it may</em>, the results are clear.','<em>That said</em>, there are legitimate reasons for caution.','<em>Even so</em>, the proposal merits serious consideration.','<em>For all that</em>, the outcome was better than feared.','<em>While it is true that</em>...','<em>Admittedly</em>, not all the evidence points in the same direction.'] },
+    { term:'Cause and Result', pos:'category', meaning:'Showing logical consequence or causal relationship.', examples:['<em>Consequently</em>, the firm was placed in administration.','<em>As a result of</em> the delays, the contract was terminated.','<em>This in turn led to</em> a broader crisis of confidence.','<em>It follows that</em> further investment is necessary.','<em>Hence</em>, the need for a thorough and independent audit.','<em>By extension</em>, the same logic applies to the wider sector.'] },
+    { term:'Condition', pos:'category', meaning:'Introducing conditions, formal or tentative.', examples:['<em>Provided that</em> the terms are met, the agreement will stand.','<em>Subject to</em> approval, work can begin next month.','<em>On the condition that</em> no further objections are raised, the motion will pass.','<em>Assuming (that)</em> the data are accurate, the model is robust.','<em>In the event that</em> a settlement cannot be reached, the case will go to trial.','<em>Failing that</em>, the matter will be referred to arbitration.'] },
+    { term:'Reformulation & Clarification', pos:'category', meaning:'Restating or clarifying for greater precision.', examples:['<em>In other words</em>, the policy has failed on every measurable outcome.','<em>To put it another way</em>, the risk is unacceptable.','<em>That is to say</em>, full compliance is mandatory.','<em>More specifically</em>, the problem lies in the wording of the third clause.','<em>To be more precise</em>, the shortfall amounts to £4.2 million.','<em>To clarify</em>, the proposal does not affect existing contracts.'] },
+    { term:'Summary & Conclusion', pos:'category', meaning:'Drawing together points or reaching a conclusion.', examples:['<em>In conclusion</em>, the evidence overwhelmingly supports immediate reform.','<em>To sum up</em>, three key structural failures have been identified.','<em>All things considered</em>, the proposal represents a reasonable compromise.','<em>In the final analysis</em>, accountability must rest with the leadership.','<em>On balance</em>, the benefits appear to outweigh the risks.','<em>Taking everything into account</em>, a cautious approach is advisable.','<em>To draw matters to a close</em>, the key recommendations are as follows.'] },
+    { term:'Exemplification', pos:'category', meaning:'Introducing examples or specific instances.', examples:['<em>For instance</em>, the carbon tax in Sweden has reduced emissions by 26%.','<em>To illustrate</em>, consider the case of the 2008 financial crisis.','<em>Take, for example</em>, the disparity in educational outcomes.','<em>This is evidenced by</em> the sharp rise in insolvencies.','<em>A case in point is</em> the collapse of Lehman Brothers.','<em>To give a concrete example</em>...'] },
+    { term:'Emphasis', pos:'category', meaning:'Highlighting the most important or surprising point.', examples:['<em>Above all</em>, transparency is non-negotiable.','<em>What is particularly striking is</em> the speed of the deterioration.','<em>It is worth noting that</em> no formal complaint was ever filed.','<em>Crucially</em>, the evidence was never independently verified.','<em>Of particular significance is</em> the absence of regulatory oversight.','<em>It cannot be overstated that</em> this represents a fundamental failure.'] },
+    { term:'Hedging & Tentativeness', pos:'category', meaning:'Softening or qualifying claims for academic, diplomatic, or cautious purposes.', examples:['<em>It would appear that</em> the system was compromised from within.','<em>There is reason to believe that</em> the data were selectively presented.','<em>It could be argued that</em> the initial response was inadequate.','<em>To some extent</em>, this reflects a wider structural problem.','<em>One might suggest that</em> a more measured approach was called for.','<em>It seems likely that</em> the full impact will only become clear over time.','<em>The evidence suggests, albeit tentatively, that</em>...'] },
+    { term:'Sequence & Order', pos:'category', meaning:'Organising information in logical or chronological order.', examples:['<em>In the first instance</em>, an independent audit must be commissioned.','<em>Subsequently</em>, the committee will review the findings.','<em>Prior to</em> any decision, all stakeholders must be consulted.','<em>In the interim</em>, operations will continue as normal.','<em>Following this</em>, a formal report will be submitted to Parliament.','<em>Thereafter</em>, the matter will be referred to the oversight board.'] },
+    { term:'Digression & Return', pos:'category', meaning:'Moving temporarily away from the main point and signalling a return.', examples:['<em>As an aside</em>, it is worth mentioning that the original proposal was never formally withdrawn.','<em>Incidentally</em>, the same error appears in the 2019 report.','<em>To return to the main point</em>, the core issue remains unresolved.','<em>To come back to</em> the question of funding — no clear answer has been provided.'] },
+    { term:'Concessive clauses', pos:'category', meaning:'Acknowledging an opposing point while maintaining the main argument.', examples:['<em>While it must be acknowledged that</em> progress has been made, significant challenges remain.','<em>Although one could argue that</em> the measure was justified, the execution was poor.','<em>Granted that</em> the evidence is limited, the conclusion is nonetheless compelling.','<em>Much as</em> the government would like to avoid further cuts, the fiscal position leaves little choice.'] },
+  ]
+},
+
+grammar: {
+  title: 'Advanced Grammar',
+  intro: 'Key grammatical structures that distinguish C1/C2 from lower levels. These cover complex clauses, advanced tenses, and formal syntactic patterns tested in CAE, CPE, and academic writing.',
+  entries: [
+    { term:'Mixed conditionals', pos:'grammar structure', meaning:'Mixing time frames in conditional sentences.', examples:['<em>If she had taken the job</em> (past hypothetical), <em>she would be living</em> in London now. (present result)', '<em>If he were more disciplined</em> (present state), <em>he would have finished</em> the project by now. (past result)'], note:'The key is identifying whether the condition and result are in the same time frame.' },
+    { term:'Subjunctive mood', pos:'grammar structure', meaning:'Used after "it is essential/vital/imperative/recommended/suggested that" and in formal usage.', examples:['It is essential that she <em>submit</em> (not "submits") the report on time.','It was recommended that the committee <em>be dissolved</em>.','I suggest that the motion <em>be tabled</em>.'], note:'The subjunctive uses the base form of the verb for all persons.' },
+    { term:'Cleft sentences (It is... that / What...is)', pos:'grammar structure', meaning:'Used to emphasise a particular element of a sentence.', examples:['<em>It was the lack of transparency that</em> caused the crisis. (emphasises cause)', '<em>What concerned us most was</em> the speed of the deterioration.','<em>It is only now that</em> the full extent of the damage is becoming clear.'], note:'"It was X that Y" emphasises X. "What X did was Y" emphasises the action.' },
+    { term:'Nominalisation', pos:'grammar structure', meaning:'Converting verbs and adjectives into nouns for a more formal, abstract style.', examples:['She decided to invest → <em>The decision to invest</em>...','They failed to comply → <em>Their failure to comply</em>...'], note:'A hallmark of academic writing. Overuse can make prose unnecessarily dense.' },
+    { term:'Complex passive constructions', pos:'grammar structure', meaning:'The passive is used in formal writing to omit agents, create objectivity, or focus on results.', examples:['The data <em>were collected</em> over a three-year period.','It <em>has been suggested that</em> further cuts may be necessary.','The matter <em>is being considered</em> at the highest level.'], note:'Use passive when the agent is unknown, unimportant, or deliberately withheld.' },
+    { term:'Relative clauses (advanced)', pos:'grammar structure', meaning:'Non-defining relative clauses with "which" referring to the whole clause; "whose" for things; "whereby" for formal methods.', examples:['The report was delayed, <em>which</em> caused considerable frustration.','A system <em>whereby</em> employees can raise concerns anonymously is essential.','The company, <em>whose</em> headquarters are in Dublin, has announced a restructure.'], note:'"Whereby" = by means of which. Exclusively formal.' },
+    { term:'Participle clauses', pos:'grammar structure', meaning:'Reduce relative or adverbial clauses for concision in formal writing.', examples:['<em>Having reviewed</em> all the evidence, the committee reached a verdict. (= After it had reviewed...)', '<em>Faced with</em> mounting pressure, the minister resigned.','The policy, <em>introduced</em> in 2020, has been widely criticised.'], note:'The participle subject must match the main clause subject. Mismatch = dangling participle (error).' },
+    { term:'Modal perfects', pos:'grammar structure', meaning:'Modal + have + past participle. Used for deduction, criticism, or speculation about the past.', examples:['He <em>must have known</em> about the irregularities. (deduction)', 'She <em>should have disclosed</em> the conflict of interest. (obligation not met)', 'They <em>could have handled</em> it more sensitively. (unrealised possibility)', 'The decision <em>may have been</em> influenced by external pressure. (speculation)'] },
+    { term:'Ellipsis and substitution', pos:'grammar structure', meaning:'Omitting or replacing words understood from context — typical in formal written English.', examples:['Some analysts predicted recovery; others <em>did not (predict recovery)</em>.','The minister was asked to resign, and eventually <em>did so</em>.'], note:'"Do so" is the formal substitute for a repeated verb phrase. "Do it" is more informal.' },
+    { term:'Fronting (topicalisation)', pos:'grammar structure', meaning:'Moving an element to the front of the sentence for emphasis or cohesion.', examples:['<em>The economic implications</em>, we have not yet fully understood.','<em>Particularly troubling</em> is the rate at which trust has been eroded.','<em>Of particular note</em> are the three recommendations in section four.'], note:'Common in academic and formal written English. Signals what the writer is focusing on.' },
+    { term:'Reporting verbs + structures', pos:'grammar structure', meaning:'Different reporting verbs require different grammatical structures.', examples:['She <em>suggested (that) he should reconsider</em> / <em>suggested reconsidering</em>.','He <em>denied having</em> met the official.','The minister <em>admitted to making</em> an error.','They <em>urged the committee to act</em> immediately.','Critics <em>accused him of misleading</em> Parliament.'], note:'"Suggest" → gerund or that-clause. "Deny/admit" → gerund. "Urge/encourage/persuade" → to-infinitive.' },
+    { term:'Concessive clauses', pos:'grammar structure', meaning:'Acknowledging a point while maintaining the main argument.', examples:['<em>However much</em> we may disagree, the decision is final.','<em>Much as</em> I respect her judgement, I cannot support this proposal.','<em>Whatever</em> the outcome, the effort will not have been wasted.','<em>Notwithstanding the fact that</em> the evidence was limited, the verdict was upheld.'] },
+    { term:'as/though + inversion (formal concession)', pos:'grammar structure', meaning:'"Adjective/Adverb/Noun + as/though + subject + verb" = concessive structure.', examples:['<em>Difficult as</em> the situation is, there are reasons for optimism.','<em>Much as</em> he tried, he could not convince the committee.','<em>Impressive though</em> the results are, they must be interpreted with caution.'], note:'The adjective or adverb moves to the front. This is a formal and distinctive C2 structure.' },
+    { term:'wish / if only + advanced structures', pos:'grammar structure', meaning:'Expressing regret (past), desire for change (present), or complaint (would).', examples:['I <em>wish</em> the government <em>had acted</em> sooner. (past regret)', 'If only the committee <em>were</em> more transparent. (present wish; subjunctive)', 'I wish he <em>would stop</em> evading the question. (complaint about present behaviour)'], note:'"Wish + would" expresses irritation about someone\'s behaviour, not a hypothetical.' },
+    { term:'have something done (causative)', pos:'grammar structure', meaning:'To arrange for someone else to do something for you.', examples:['The company <em>had its accounts audited</em> by an independent firm.','She <em>had the contract reviewed</em> before signing.'], note:'Also used passively for unwanted events: "She <em>had her car stolen</em>." (= it happened to her).' },
+    { term:'Subjunctive in formal clauses', pos:'grammar structure', meaning:'Used after expressions of demand, recommendation, or necessity in formal style.', examples:['It is imperative that all staff <em>be informed</em>.','The committee recommended that the policy <em>be withdrawn</em>.','The court ordered that he <em>appear</em> in person.'], note:'The subjunctive uses the base form for all persons, including third person singular (no -s).' },
+  ]
+}
+
+}; // end THEORY
+
+// ══════════════════════════════════════════════════════════
+//  EXERCISE ENGINE
+// ══════════════════════════════════════════════════════════
+let activeFilters = new Set(['all']);
+let stats = { attempted:0, correct:0, streak:0 };
+let lastUsed = [];
+let matchState = { selected:null, matched:new Set() };
+let currentCard = null;
+
+function switchPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.main-nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function toggleFilter(key, btn) {
+  if (key==='all') {
+    activeFilters = new Set(['all']);
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  } else {
+    activeFilters.delete('all');
+    document.querySelector('.filter-btn:first-child').classList.remove('active');
+    if (activeFilters.has(key)) {
+      activeFilters.delete(key);
+      btn.classList.remove('active');
+      if (activeFilters.size===0) { activeFilters.add('all'); document.querySelector('.filter-btn:first-child').classList.add('active'); }
+    } else {
+      activeFilters.add(key);
+      btn.classList.add('active');
+    }
+  }
+}
+
+function getPool() {
+  if (activeFilters.has('all')) return Object.entries(DB).flatMap(([cat,items])=>items.map(i=>({...i,cat})));
+  return [...activeFilters].flatMap(f=>(DB[f]||[]).map(i=>({...i,cat:f})));
+}
+
+function pickRandom(pool) {
+  if (!pool.length) return null;
+  let candidates = pool.filter((_,i)=>!lastUsed.includes(i));
+  if (!candidates.length) { lastUsed=[]; candidates=pool; }
+  const idx = Math.floor(Math.random()*candidates.length);
+  const item = candidates[idx];
+  const gi = pool.indexOf(item);
+  lastUsed.push(gi);
+  if (lastUsed.length>8) lastUsed.shift();
+  return item;
+}
+
+function generateExercise() {
+  const pool = getPool();
+  if (!pool.length) { document.getElementById('exercise-container').innerHTML='<div class="empty-state"><div class="big">∅</div><p>No exercises for selected filters.</p></div>'; return; }
+  const item = pickRandom(pool);
+  currentCard = item;
+  const catLabels = { prepositions:'Prepositions',phrasal:'Phrasal Verbs',collocations:'Collocations',idioms:'Idioms',fixed:'Fixed Phrases',wordformation:'Word Formation',error:'Error Correction',transformation:'Key Word Transformation',register:'Formal Register',confusables:'Confusables' };
+  const typeLabels = { fill:'Fill in the blank',mc:'Multiple choice',error:'Find & correct the error',transform:'Key word transformation' };
+  let body = '';
+  if (item.type==='fill') body=renderFill(item);
+  else if (item.type==='mc') body=renderMC(item);
+  else if (item.type==='error') body=renderError(item);
+  else if (item.type==='transform') body=renderTransform(item);
+  document.getElementById('exercise-container').innerHTML=`<div class="exercise-card" id="ex-card"><div class="card-header"><span class="tag cat">${catLabels[item.cat]||item.cat}</span><span class="tag">${typeLabels[item.type]||item.type}</span><span class="difficulty">C1/C2</span></div>${body}<div class="feedback-box" id="ex-fb"></div></div>`;
+  if (item.type==='fill') { const inp=document.getElementById('ex-blank'); if(inp) inp.addEventListener('keydown',e=>{if(e.key==='Enter')checkFill();}); }
+  if (item.type==='error') { const inp=document.getElementById('ex-error-inp'); if(inp) inp.addEventListener('keydown',e=>{if(e.key==='Enter')checkError();}); }
+}
+
+function renderFill(item) {
+  const hint = item.hint?`<div class="hint-text">💡 ${item.hint}</div>`:'';
+  return `<div class="question-text">${item.q.replace('___','<input class="blank-input" id="ex-blank" autocomplete="off" spellcheck="false" placeholder="…">')}</div>${hint}<div class="card-actions"><button class="btn btn-primary" onclick="checkFill()">Check</button><button class="btn" onclick="generateExercise()">Skip →</button></div>`;
+}
+function renderMC(item) {
+  const hint = item.hint?`<div class="hint-text">💡 ${item.hint}</div>`:'';
+  const opts = [...item.options].sort(()=>Math.random()-.5);
+  return `<div class="question-text">${item.q}</div>${hint}<div class="choices-grid">${opts.map(o=>`<button class="choice-btn" onclick="checkMC(this,'${escQ(o)}','${escQ(item.a)}')">${o}</button>`).join('')}</div>`;
+}
+function renderError(item) {
+  return `<div class="question-text">Find and correct the error in this sentence:</div><div class="error-sentence">${item.sentence}</div><input class="error-input" id="ex-error-inp" placeholder="Type the corrected version…" autocomplete="off"><div class="card-actions"><button class="btn btn-primary" onclick="checkError()">Check</button><button class="btn" onclick="showErrorAnswer()">Show Answer</button><button class="btn" onclick="generateExercise()">Skip →</button></div>`;
+}
+function renderTransform(item) {
+  return `<div class="question-text">Rewrite the sentence using the key word. <strong>Do not change the key word.</strong></div><div class="transform-box"><div class="transform-label">Original sentence</div>${item.original}</div><div class="transform-box"><div class="transform-label">Key word</div><span class="key-word">${item.keyword}</span></div><div class="hint-text">💡 ${item.clue}</div><div class="card-actions"><button class="btn btn-primary" onclick="showTransformAnswer()">Reveal Answer</button><button class="btn" onclick="markTransform(true)">✓ Got it</button><button class="btn" onclick="markTransform(false)">✗ Missed it</button><button class="btn" onclick="generateExercise()">Skip →</button></div>`;
+}
+
+function escQ(s){ return s.replace(/'/g,"\\'"); }
+function normalise(s){ return s.trim().toLowerCase().replace(/['']/g,"'").replace(/\s+/g,' ').replace(/[.,!?;:]/g,''); }
+
+function checkFill() {
+  const inp=document.getElementById('ex-blank'); if(!inp||!currentCard) return;
+  const ok=normalise(inp.value)===normalise(currentCard.a)||(currentCard.alts||[]).map(normalise).includes(normalise(inp.value));
+  inp.classList.add(ok?'correct':'wrong'); inp.disabled=true;
+  showFeedback(ok,currentCard.a,currentCard.explanation); recordAnswer(ok);
+}
+function checkMC(btn,selected,correct) {
+  document.getElementById('ex-card').querySelectorAll('.choice-btn').forEach(b=>b.disabled=true);
+  const ok=normalise(selected)===normalise(correct);
+  btn.classList.add(ok?'correct':'wrong');
+  if(!ok) document.getElementById('ex-card').querySelectorAll('.choice-btn').forEach(b=>{if(normalise(b.textContent)===normalise(correct))b.classList.add('reveal');});
+  showFeedback(ok,correct,currentCard&&currentCard.hint); recordAnswer(ok);
+  if(ok) setTimeout(generateExercise,1600);
+}
+function checkError() {
+  const inp=document.getElementById('ex-error-inp'); if(!inp||!currentCard) return;
+  const ok=normalise(inp.value).includes(normalise(currentCard.correction));
+  inp.style.borderColor=ok?'var(--correct)':'var(--wrong)'; inp.disabled=true;
+  const fb=document.getElementById('ex-fb');
+  fb.className='feedback-box '+(ok?'ok':'bad')+' show';
+  fb.innerHTML=ok?`✓ Correct! ${currentCard.explanation||''}`:`✗ The error is: <strong>"${currentCard.correction}"</strong>.<br>${currentCard.explanation||''}`;
+  recordAnswer(ok);
+  document.querySelector('.card-actions').innerHTML=`<button class="btn btn-primary" onclick="generateExercise()">Next Exercise →</button>`;
+}
+function showErrorAnswer() {
+  const fb=document.getElementById('ex-fb');
+  fb.className='feedback-box bad show';
+  fb.innerHTML=`Correction: <strong>"${currentCard.correction}"</strong>.<br>${currentCard.explanation||''}`;
+  document.querySelector('.card-actions').innerHTML=`<button class="btn btn-primary" onclick="generateExercise()">Next Exercise →</button>`;
+}
+function showTransformAnswer() {
+  document.getElementById('ex-fb').className='feedback-box ok show';
+  document.getElementById('ex-fb').innerHTML=`Suggested answer:<br><strong>${currentCard.answer}</strong>`;
+}
+function markTransform(ok) {
+  recordAnswer(ok);
+  const fb=document.getElementById('ex-fb');
+  fb.className='feedback-box '+(ok?'ok':'bad')+' show';
+  fb.innerHTML=ok?'✓ Marked as correct.':`✗ Suggested: <strong>${currentCard.answer}</strong>`;
+  document.querySelector('.card-actions').innerHTML=`<button class="btn btn-primary" onclick="generateExercise()">Next Exercise →</button>`;
+}
+function showFeedback(ok,answer,explanation) {
+  const fb=document.getElementById('ex-fb');
+  fb.className='feedback-box '+(ok?'ok':'bad')+' show';
+  fb.innerHTML=ok?`✓ Correct! ${explanation||''}`:`✗ Answer: <strong>"${answer}"</strong>. ${explanation||''}`;
+  const actions=document.querySelector('.card-actions');
+  if(actions){ const next=document.createElement('button'); next.className='btn btn-primary'; next.textContent='Next Exercise →'; next.onclick=generateExercise; actions.appendChild(next); }
+}
+function recordAnswer(ok) {
+  stats.attempted++; if(ok){stats.correct++;stats.streak++;}else{stats.streak=0;}
+  document.getElementById('stat-attempted').textContent=stats.attempted;
+  document.getElementById('stat-correct').textContent=stats.correct;
+  document.getElementById('stat-acc').textContent=Math.round(stats.correct/stats.attempted*100)+'%';
+  document.getElementById('stat-streak').textContent=stats.streak;
+}
+
+// ══════════════════════════════════════════════════════════
+//  THEORY ENGINE
+// ══════════════════════════════════════════════════════════
+let currentTheorySection = 'prep';
+
+function showTheory(key, btn) {
+  currentTheorySection = key;
+  document.querySelectorAll('.sidebar-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  document.getElementById('theory-search').value='';
+  document.getElementById('search-count').textContent='';
+  renderTheorySection(key);
+}
+
+function renderTheorySection(key) {
+  const data = THEORY[key];
+  if(!data) return;
+  const html = `
+    <div class="theory-h1">${data.title}</div>
+    <div class="theory-intro">${data.intro}</div>
+    <div class="entry-grid" id="entry-grid">
+      ${data.entries.map((e,i)=>renderEntry(e,i)).join('')}
+    </div>`;
+  document.getElementById('theory-container').innerHTML = html;
+}
+
+function renderEntry(e, i) {
+  const exHtml = (e.examples||[]).map(ex=>`<div class="example-row"><span class="ex-label">e.g.</span><span class="ex-text">${ex}</span></div>`).join('');
+  const note = e.note ? `<div class="entry-note"><strong>⚠ Note:</strong> ${e.note}</div>` : '';
+  return `<div class="entry" id="entry-${i}">
+    <div class="entry-head" onclick="toggleEntry(${i})">
+      <span class="entry-term">${e.term}</span>
+      <span class="entry-pos">${e.pos}</span>
+      <span class="entry-arrow">▾</span>
+    </div>
+    <div class="entry-body">
+      <div class="entry-meaning">${e.meaning}</div>
+      ${exHtml}
+      ${note}
+    </div>
+  </div>`;
+}
+
+function toggleEntry(i) {
+  const el = document.getElementById('entry-'+i);
+  el.classList.toggle('open');
+}
+
+function searchTheory(query) {
+  const q = query.trim().toLowerCase();
+  if(!q) {
+    renderTheorySection(currentTheorySection);
+    document.getElementById('search-count').textContent='';
+    return;
+  }
+  // search all categories
+  let results = [];
+  Object.entries(THEORY).forEach(([key, data])=>{
+    data.entries.forEach(e=>{
+      const text = (e.term+' '+e.meaning+' '+(e.examples||[]).join(' ')+' '+(e.note||'')).toLowerCase();
+      if(text.includes(q)) results.push({...e, _cat: data.title});
+    });
+  });
+  document.getElementById('search-count').textContent = `${results.length} result${results.length!==1?'s':''} found across all categories`;
+  if(!results.length) {
+    document.getElementById('theory-container').innerHTML='<div class="no-results">No entries found for "'+query+'"</div>';
+    return;
+  }
+  const html = `<div class="entry-grid">${results.map((e,i)=>{
+    const exHtml=(e.examples||[]).map(ex=>`<div class="example-row"><span class="ex-label">e.g.</span><span class="ex-text">${ex}</span></div>`).join('');
+    const note=e.note?`<div class="entry-note"><strong>⚠ Note:</strong> ${e.note}</div>`:'';
+    return `<div class="entry open" id="sr-${i}">
+      <div class="entry-head" onclick="this.parentElement.classList.toggle('open')">
+        <span class="entry-term">${e.term}</span>
+        <span class="entry-pos">${e.pos}</span>
+        <span class="tag cat" style="margin-left:.5rem;font-size:.6rem">${e._cat}</span>
+        <span class="entry-arrow">▾</span>
+      </div>
+      <div class="entry-body">
+        <div class="entry-meaning">${e.meaning}</div>
+        ${exHtml}${note}
+      </div>
+    </div>`;
+  }).join('')}</div>`;
+  document.getElementById('theory-container').innerHTML=html;
+}
+
+// Init theory
+showTheory('prep', document.querySelector('.sidebar-btn'));
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.ctrlKey)generateExercise();});
+</script>
+</body>
+</html>
